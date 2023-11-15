@@ -18,7 +18,7 @@ class HeaderPy:
         self,
         file_path: Union[Path, str],
         header: str,
-        skip_prefixes: Optional[List] = None,
+        skip_prefixes: Optional[List[Pattern]] = None,
     ) -> None:
         if isinstance(file_path, str):
             file_path = Path(file_path)
@@ -37,12 +37,14 @@ class HeaderPy:
 
             skip_index = 0
             if skip_prefixes:
-                header_formatted = "\n\n" + header.rstrip("\r\n") + "\n\n"
                 for i, line in enumerate(lines):
-                    if any(line.startswith(prefix) for prefix in skip_prefixes):
-                        skip_index = i + 1
+                    for pattern in skip_prefixes:
+                        if pattern.search(line):
+                            skip_index = i + 1
+                            break
                     else:
                         break
+                header_formatted = "\n\n" + header.rstrip("\r\n") + "\n\n"
             else:
                 header_formatted = header.rstrip("\r\n") + "\n\n"
 

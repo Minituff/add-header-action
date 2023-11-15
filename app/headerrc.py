@@ -189,13 +189,16 @@ class HeaderRC:
 
         return new_dict
 
-    def get_skip_lines_that_start_for_file(self, file_path: str) -> Optional[List]:
+    def get_skip_lines_that_start_for_file(self, file_path: str) -> Optional[List[Pattern]]:
         for pattern, val in self.skip_lines_that_start_with_regex.items():
             if pattern.search(file_path):
                 if isinstance(val, list):
-                    return val
+                    new_vals: List[Pattern] = []
+                    for v in val:
+                       new_vals.append(re.compile(rf"{v}"))
+                    return new_vals
                 elif isinstance(val, str):
-                    return [val]
+                    return [re.compile(rf"{val}")]
 
                 break
         return None

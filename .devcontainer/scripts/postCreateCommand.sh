@@ -16,6 +16,14 @@ cecho() {
 cecho "CYAN" "Installing python packages (for local development)..."
 python3 -m pip install -r requirements.txt --upgrade pip
 
+echo "Adding aliases (for convenience)..."
+
+# Build the container to test locally
+echo "alias build=\"cd /workspaces/add-header-action && docker build -t add-header-action --no-cache .\"" >> ~/.zshrc
+
+# Run the script locally
+echo "alias run=\"cd /workspaces/add-header-action && python3 app/main.py\"" >> ~/.zshrc
+
 
 cecho "GREEN" "-- Init complete -- Nautical development enviornment ready to go!!"
 
