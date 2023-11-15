@@ -49,7 +49,11 @@
 					"editor.defaultFormatter": "ms-python.black-formatter"
 				},
 				"python.languageServer": "Pylance",
-				"python.analysis.typeCheckingMode": "basic"
+				"python.analysis.typeCheckingMode": "basic",
+				"files.associations": {
+					"*.env": "shellscript",
+					"*.json5": "jsonc"
+				}
 			}
 		}
 	},

@@ -4,17 +4,19 @@ import yaml
 import os
 from re import Pattern
 from pathlib import Path
+from termcolor import cprint
 
 # Set this enviornment variable and all the paths will be local (ie. not in a container)
 TEST_MODE = os.getenv("TEST_MODE", False)
 
 
 class HeaderRC:
-    def __init__(self):
+    def __init__(self, verbose=False) -> None:
+        self.verbose = verbose
         self.home_path = Path("/action/workspace/")
         self.work_path = Path("/github/workspace")
         if TEST_MODE == "true" or TEST_MODE == True:
-            print("--- Running in TEST mode ---")
+            cprint("--- Running in TEST mode ---", "red")
             self.work_path = Path()
             self.home_path = Path()
 
@@ -31,13 +33,36 @@ class HeaderRC:
         self.file_associations_by_extension = self._get_file_associations_by_extension()
         self._flatten_file_associations("file_associations_by_comment")
         self._flatten_file_associations("file_associations_by_extension")
-        self._skip_lines_that_start_with_raw = (
-            self._get_skip_lines_that_start_with_raw()
-        )
+        self._skip_lines_that_start_with_raw = self._get_skip_lines_that_start_with_raw()
+        
         self.header = self._get_header()
 
         self.ignores: list[Pattern] = []
+        self.ignores_str: list[str] = []
         self._load_ignores()
+        
+        if self.verbose:
+            cprint("Begin header", "magenta")
+            cprint(self.header, "green")
+            print("")
+            
+            cprint("File associations", "magenta")
+            cprint(str(self._file_associations), "green")
+            print("")
+            
+            cprint("Untracked files", "magenta")
+            cprint(str(self.ignores_str), "green")
+            print("")
+            
+            # cprint("Tracked files", "magenta")
+            # cprint(str(self.ignores_str), "green")
+            # print("")
+            
+            cprint("Skip lines", "magenta")
+            cprint(str(self._skip_lines_that_start_with_raw), "green")
+            
+            
+            
 
     def _load_default_yml(self):
         p = Path(self.home_path / "headerrc-default.yml")
@@ -94,6 +119,7 @@ class HeaderRC:
                     if stripped_line and not stripped_line.startswith("#"):
                         # Convert the .gitignore pattern to a regex pattern
                         regex_pattern = re.escape(stripped_line).replace(r"\*", ".*")
+                        self.ignores_str.append(stripped_line)
                         patterns.append(re.compile(regex_pattern))
         except FileNotFoundError:
             print(f"No .gitignore file found at {gitignore_path}")
@@ -119,6 +145,7 @@ class HeaderRC:
         for pattern in ignores_filtered:
             p = re.compile(rf"{pattern}")
             self.ignores.append(p)
+            self.ignores_str.append(pattern)
 
         gitignore = self._handle_untrack_gitignore()
         self.ignores += gitignore

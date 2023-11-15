@@ -1,5 +1,7 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "platform": "github",
+  "dependencyDashboardTitle": "Renovate Dashboard 🤖",
   "extends": [
     "config:recommended"
   ]

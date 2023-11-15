@@ -17,15 +17,15 @@ jobs:
     
     - name: Add header action step
       uses: ./ # Uses an action in the root directory
+      # Normally would be 'minituff/add-header-action'
       id: add-header-action
       with:
-        dry-run: false
-
-    - name: Get the output of add-header-action
-      run: echo "add-header-action Ouput is ${{ steps.add-header-action.outputs }}"
+        dry-run: true
+        verbose: true
 
     - name: Commit changes back to repo
       uses: stefanzweifel/git-auto-commit-action@v5
+      # Token comes from actions/checkout
 
 
 

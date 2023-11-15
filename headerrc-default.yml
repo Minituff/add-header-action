@@ -13,9 +13,10 @@ tracked_files:
 
 # Remove items from the default values by using a !. Like "!^.git/"
 untracked_files:
-  - ^.git/ # Very important to ignore
-  - ^.gitignore
-  - headerrc-default.yml
+  - ^\.git/ # Very important to ignore
+  - ^\.gitignore
+  - ^headerrc-default.yml$
+  - \.json$ # Most json files cannot contain comments
 
 
 header: |
@@ -30,8 +31,8 @@ header: |
 
 # Group multiple items by the comment value
 file_associations_by_comment:  #Format = Comment: List[Regex for file match]
-  "#": [".gitignore$", ".yml$", ".yaml$" , ".sh$"]
-  //: [".js$", ".ts$"]
+  "#": ["\\.gitignore$", "\\.yml$", "\\.yaml$" , "\\.sh$"]
+  //: ["\\.js$", "\\.ts$", "\\.json5$"]
 
 
 # The item extension and the associated comment. Overrides file_associations_by_comment

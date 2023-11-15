@@ -9,7 +9,8 @@ services:
       - C:\Users\James-PC\IdeaProjects\add-header-action:/github/workspace
     # Use this to keep the container open so you can shell inside it
     # entrypoint: ["tail", "-f", "/dev/null"]
-    command: "--dry-run false"
-    environment:
-      - TEST_DOCKER=true
-      - DRY_RUN=false
+    command: |
+      --dry-run
+      false
+      --verbose
+      true

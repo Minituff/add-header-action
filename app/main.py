@@ -2,19 +2,21 @@ import os
 import sys
 from pathlib import Path
 from re import Pattern
-from typing import List, Optional, Union
+from typing import Any, List, Optional, Union
 import sys
 import argparse
+from termcolor import cprint
 
 from headerrc import HeaderRC
 
 
 class HeaderPy:
-    def __init__(self, dry_run=False) -> None:
+    def __init__(self, dry_run=False, verbose=False) -> None:
         self.dry_run = dry_run
-        self.header_rc = HeaderRC()
+        self.verbose = verbose
+        self.header_rc = HeaderRC(verbose=self.verbose)
 
-    def run(self):
+    def run(self) -> None:
         self._loop_through_files(self.header_rc.ignores)
 
     def _add_header_to_file(
@@ -40,6 +42,9 @@ class HeaderPy:
 
             skip_index = 0
             if skip_prefixes:
+                if self.verbose:
+                    cprint(f"skip_lines_that_start_with enabled for {file_path}" "yellow")
+                    
                 for i, line in enumerate(lines):
                     for pattern in skip_prefixes:
                         if pattern.search(line):
@@ -70,6 +75,8 @@ class HeaderPy:
             # Check if the current FOLDER matches any of the ignore patterns
             # This allows us to not go into that directory and save time
             if any(pattern.search(file_path) for pattern in re_ignore_patterns):
+                if self.verbose and not file_path.startswith(".git"):
+                    cprint(f"Skip - {file_path}", "yellow")
                 continue
 
             for file in files:
@@ -78,10 +85,14 @@ class HeaderPy:
 
                 # Check if the current FILE matches any of the ignore patterns
                 if any(pattern.search(file_path) for pattern in re_ignore_patterns):
+                    if self.verbose and not file_path.startswith(".git"):
+                        cprint(f"Skip - {file_path}", "yellow")
                     continue
 
                 full_file_path = Path(base_dir / file_path)
                 if not full_file_path.is_file():
+                    if self.verbose and not file_path.startswith(".git"):
+                        cprint(f"Skip (not a file) - {file_path}", "yellow")
                     continue
 
                 relative_file_path = Path(file_path)
@@ -91,11 +102,19 @@ class HeaderPy:
                 skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
 
                 if self.dry_run:
-                    print("Would Process:", relative_file_path)
+                    print("Would Process -", relative_file_path)
                 else:
-                    print("Processing:", relative_file_path)
+                    print("Processing -", relative_file_path)
                     self._add_header_to_file(full_file_path, header, skip_prefixes)
 
+
+def _get_bool(config: dict[str, Any], input_str: str, default=False) -> bool:
+    if str(config.get(input_str, default)).lower() == "true":
+        return True
+    elif str(config.get(input_str, default)).lower() == "false":
+        return False
+    return default
+    
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
@@ -104,6 +123,7 @@ if __name__ == "__main__":
         add_help=False
     )
     parser.add_argument("--dry-run", help="Don't actually change files, but output effected files instead.")
+    parser.add_argument("--verbose", help="Add more output to the console for debugging.")
 
     args, unknown = parser.parse_known_args()
     config = vars(args) # Get args to print
@@ -111,11 +131,9 @@ if __name__ == "__main__":
     print("Arguments detected:", config)
     if unknown:
         print("Unknown arguments: ", unknown)
-
-    dry_run = False
-    if str(config.get("dry_run", False)).lower() == "true":
-        dry_run = True
         
+    dry_run = _get_bool(config, "dry_run")
+    verbose = _get_bool(config, "verbose")
     
-    h = HeaderPy(dry_run=dry_run)
+    h = HeaderPy(verbose=verbose, dry_run=dry_run)
     h.run()
