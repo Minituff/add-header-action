@@ -3,6 +3,7 @@ import sys
 from pathlib import Path
 from re import Pattern
 from typing import List, Optional, Union
+import sys
 
 from headerrc import HeaderRC
 
@@ -92,7 +93,11 @@ class HeaderPy:
 
 
 if __name__ == "__main__":
-    input_variable = os.environ.get("DRY-RUN", "None")
-    print(f"DRY-RUN: {input_variable}")
+    print(type(sys.argv))
+    print('The command line arguments are:')
+    for i in sys.argv:
+        print(i)
+    
     h = HeaderPy()
     h.run()
+    os.environ["GITHUB_OUTPUT"] = "This is a test Output"
