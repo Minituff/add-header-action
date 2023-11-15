@@ -7,10 +7,7 @@ COPY requirements.txt headerrc-default.yml app/*.py /action/workspace/
 # Install dependencies
 RUN \
     echo "**** Install ****" && \
-    python3 -m pip install --no-cache-dir -r /action/workspace/requirements.txt && \
-    apk add --no-cache \
-    bash \ 
-    git
+    python3 -m pip install --no-cache-dir -r /action/workspace/requirements.txt
 
 
 # When the action runs, it will automatically map the default working directory (GITHUB_WORKSPACE) on the runner with the /github/workspace directory on the container.
@@ -18,5 +15,4 @@ RUN \
 VOLUME [ "/github/workspace" ]
 
 # Code file to execute when the docker container starts up
-# CMD ["/action/workspace/main.py"]
 ENTRYPOINT ["python3", "-u", "/action/workspace/main.py"]

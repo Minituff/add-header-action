@@ -1,15 +1,7 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the
-// README at: https://github.com/devcontainers/templates/tree/main/src/universal
 {
 	"$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json",
 	"name": "Add-header (action)",
-	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
-	// "image": "mcr.microsoft.com/devcontainers/python:3",
-	"build": {
-		"context": "..", // Switch path to root
-		"dockerfile": "Dockerfile"
-	},
-	// Features to add to the dev container. More info: https://containers.dev/features.
+	"image": "mcr.microsoft.com/devcontainers/python:3",
 	"features": {
 		"ghcr.io/devcontainers-contrib/features/zsh-plugins:0": {
 			"plugins": "copypath git dirhistory extract z colorize command-not-found colored-man-pages sudo zsh-completions zsh-autosuggestions fast-syntax-highlighting zsh-autocomplete",
@@ -34,9 +26,7 @@
 				"redhat.vscode-yaml"
 			],
 			"settings": {
-				// "http.proxyStrictSSL": false, // Fixes extensions not installing
-				// "extensions.verifySignature": false, // Bug fix: https://github.com/microsoft/vscode-remote-release/issues/8169
-				// "http.proxySupport": "on",
+				// "http.proxyStrictSSL": false, // Fixes extensions not installing if you use a proxy
 				"terminal.integrated.defaultProfile.linux": "zsh",
 				"terminal.integrated.profiles.linux": {
 					"bash": {
@@ -60,10 +50,10 @@
 				},
 				"python.languageServer": "Pylance",
 				"python.analysis.typeCheckingMode": "basic"
-			},
-			// Not running? in ~/.docker/config.json change credsStore to credStore
-			"postCreateCommand": "./.devcontainer/scripts/postCreateCommand.sh",
-			"remoteUser": "root"
+			}
 		}
-	}
+	},
+	// Not running? in ~/.docker/config.json change credsStore to credStore
+	"postCreateCommand": "./.devcontainer/scripts/postCreateCommand.sh",
+	"remoteUser": "root"
 }

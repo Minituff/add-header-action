@@ -5,8 +5,8 @@ import os
 from re import Pattern
 from pathlib import Path
 
+# Set this enviornment variable and all the paths will be local (ie. not in a container)
 TEST_MODE = os.getenv("TEST_MODE", False)
-# TEST_MODE = True
 
 
 class HeaderRC:
@@ -65,12 +65,20 @@ class HeaderRC:
             exit(1)
 
         if p1.exists():
+            print(f"Found {p1}")
             with open(p1, "r") as file:
                 self.user_yml = yaml.safe_load(file)
 
         if p2.exists():
+            print(f"Found {p2}")
             with open(p2, "r") as file:
                 self.user_yml = yaml.safe_load(file)
+                
+        if p1.exists() and p2.exists():
+            print("WARNING: Found 2 configuration files.")
+            print(f" - {p1}")
+            print(f" - {p2}")
+            print(f"WARNING {p2} will be used. All others are ignored")
 
     def _handle_untrack_gitignore(self):
         if not self.untrack_gitignore_enabled:

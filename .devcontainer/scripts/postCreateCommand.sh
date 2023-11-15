@@ -12,5 +12,13 @@ cecho() {
   printf "${!1}${2} ${NC}\n" # <-- bash
 }
 
-cecho "GREEN" "🏁 PostCreate complete. Development enviornment ready to go!!"
 
+cecho "CYAN" "Installing python packages (for local development)..."
+python3 -m pip install -r requirements.txt --upgrade pip
+
+
+cecho "GREEN" "-- Init complete -- Nautical development enviornment ready to go!!"
+
+
+zsh && omz reload
+# No need to 'source ~/.zshrc' since the terminal won't be open yet
