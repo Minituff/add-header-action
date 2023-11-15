@@ -5,7 +5,8 @@ services:
     container_name: add-header-action
     volumes:
       # This mount only works in github actions
-      - /workspaces/add-header-action:/github/workspace
+      # - /workspaces/add-header-action:/github/workspace
+      - C:\Users\James-PC\IdeaProjects\add-header-action:/github/workspace
     # Use this to keep the container open so you can shell inside it
     # entrypoint: ["tail", "-f", "/dev/null"]
 
