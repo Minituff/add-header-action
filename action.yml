@@ -22,5 +22,4 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - -l # Required
     - --dry-run ${{ inputs.dry-run }}

@@ -104,7 +104,6 @@ if __name__ == "__main__":
         formatter_class=argparse.RawDescriptionHelpFormatter,
         add_help=False
     )
-    parser.add_argument('-l', '--list', type=lambda a: json.loads('['+a.replace(" ",",")+']'), default="", help="List of values")                                              
     parser.add_argument("--dry-run", help="Don't actually change files, but output effected files instead.")
 
     args = parser.parse_args()
