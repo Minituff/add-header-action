@@ -5,12 +5,14 @@ from re import Pattern
 from typing import List, Optional, Union
 import sys
 import argparse
+import json
 
 from headerrc import HeaderRC
 
 
 class HeaderPy:
-    def __init__(self) -> None:
+    def __init__(self, dry_run=False) -> None:
+        self.dry_run = dry_run
         self.header_rc = HeaderRC()
 
     def run(self):
@@ -85,33 +87,40 @@ class HeaderPy:
 
                 relative_file_path = Path(file_path)
 
-                print("Processing:", relative_file_path)
 
                 header = self.header_rc.get_header_for_file(file)
                 skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
 
-                self._add_header_to_file(full_file_path, header, skip_prefixes)
+                if self.dry_run:
+                    print("Would Process:", relative_file_path)
+                else:
+                    print("Processing:", relative_file_path)
+                    self._add_header_to_file(full_file_path, header, skip_prefixes)
 
 
 if __name__ == "__main__":
-    # This works but they are not named
-    # print('The command line arguments are:')
-    # for i in sys.argv:
-    #     print(i)
-    parser = argparse.ArgumentParser()
-
     parser = argparse.ArgumentParser(
         description="Add header action",
-        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        add_help=False
     )
+    parser.add_argument('-l', '--list', type=lambda a: json.loads('['+a.replace(" ",",")+']'), default="", help="List of values")                                              
     parser.add_argument("--dry-run", help="Don't actually change files, but output effected files instead.")
-    parser.add_argument("--something-else", help="Not sure.")
 
     args = parser.parse_args()
+    
+    # Get args to print
     config = vars(args)
-    print(config)
+    del config['list'] # This is only used to allow args from Docker
+    
+    print("Arguments detected:", config)
 
-    h = HeaderPy()
+    dry_run = False
+    if str(config.get("dry_run", False)).lower() == "true":
+        dry_run = True
+        
+
+    h = HeaderPy(dry_run=dry_run)
     h.run()
 
     os.environ["GITHUB_OUTPUT"] = "This is a test Output"
