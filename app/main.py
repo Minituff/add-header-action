@@ -4,6 +4,7 @@ from pathlib import Path
 from re import Pattern
 from typing import List, Optional, Union
 import sys
+import argparse
 
 from headerrc import HeaderRC
 
@@ -93,11 +94,23 @@ class HeaderPy:
 
 
 if __name__ == "__main__":
-    print(type(sys.argv))
-    print('The command line arguments are:')
-    for i in sys.argv:
-        print(i)
-    
+    # This works but they are not named
+    # print('The command line arguments are:')
+    # for i in sys.argv:
+    #     print(i)
+    parser = argparse.ArgumentParser()
+
+    parser = argparse.ArgumentParser(
+        description="Add header action",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    )
+    parser.add_argument("--dry-run", help="Don't actually change files, but output effected files instead.")
+
+    args = parser.parse_args()
+    config = vars(args)
+    print(config)
+
     h = HeaderPy()
     h.run()
+
     os.environ["GITHUB_OUTPUT"] = "This is a test Output"

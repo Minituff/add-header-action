@@ -19,10 +19,8 @@ jobs:
       with:
         dry-run: "dry run this lets go"
 
-    - name: Check readme (Before)
-      run: cat README.md
+    - name: Get the output of add-header-action
+      run: echo "add-header-action Ouput is ${{ steps.add-header-action.outputs }}"
 
-    - name: Check readme (After)
-      run: cat README.md
 
 
