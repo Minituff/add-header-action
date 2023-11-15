@@ -17,7 +17,8 @@ jobs:
       uses: ./ # Uses an action in the root directory
       id: add-header-action
       with:
-        dry-run: "dry run this lets go"
+        dry-run: --dry-run true
+        something-else: --something-else false
 
     - name: Get the output of add-header-action
       run: echo "add-header-action Ouput is ${{ steps.add-header-action.outputs }}"

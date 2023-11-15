@@ -105,6 +105,7 @@ if __name__ == "__main__":
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
     )
     parser.add_argument("--dry-run", help="Don't actually change files, but output effected files instead.")
+    parser.add_argument("--something-else", help="Not sure.")
 
     args = parser.parse_args()
     config = vars(args)
