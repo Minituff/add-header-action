@@ -16,6 +16,8 @@ jobs:
     - name: Add header action step
       uses: ./ # Uses an action in the root directory
       id: add-header-action
+      with:
+        dry-run: "dry run this lets go"
 
     - name: Check readme (Before)
       run: cat README.md

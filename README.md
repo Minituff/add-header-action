@@ -1,5 +1,5 @@
 # Add header-action
-A GitHub action to add a pre-defined header to files within a repo
+Add a header to any file within you repo.
 
 
 # BUILD container

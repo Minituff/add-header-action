@@ -92,5 +92,7 @@ class HeaderPy:
 
 
 if __name__ == "__main__":
+    input_variable = os.environ.get("DRY-RUN", "None")
+    print(f"DRY-RUN: {input_variable}")
     h = HeaderPy()
     h.run()

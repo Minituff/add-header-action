@@ -1,20 +1,24 @@
 # action.yml
-name: 'Hello World'
-description: 'Greet someone and record the time'
+name: 'Add-header'
+description: 'Add a header to any file within you repo.'
+
+# https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#branding
 branding:
-  icon: 'book-open'
-  color: 'green'
+  icon: 'align-left'
+  color: 'red'
+
 inputs:
-  who-to-greet:  # id of input
-    description: 'Who to greet'
-    required: true
-    default: 'World'
+  dry-run:
+    description: 'Do not actually make changes, instead effect files are viewable in the logs'
+    required: false
+    default: "false"
+
 outputs:
   time: # id of output
     description: 'The time we greeted you'
+
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - ${{ inputs.input-one }}
-    - ${{ inputs.input-two }}
+    - ${{ inputs.dry-run }}
