@@ -6,6 +6,9 @@ on:
     branches:
       - main
 
+env: 
+  FORCE_COLOR: "1" # The "FORCE_COLOR" variable, when set to 1, tells Nox to colorize itself.
+
 jobs:
   build:
     name: Add headers
@@ -22,6 +25,8 @@ jobs:
       with:
         dry-run: true
         verbose: true
+      
+
 
     - name: Commit changes back to repo
       uses: stefanzweifel/git-auto-commit-action@v5
