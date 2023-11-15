@@ -26,4 +26,4 @@ runs:
   image: 'Dockerfile'
   args:
     - "--dry-run ${{ inputs.dry-run }}"
-    - --something-else ${{ something-else }}"
+    - --something-else ${{ inputs.something-else }}"
