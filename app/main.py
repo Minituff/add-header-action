@@ -106,11 +106,10 @@ if __name__ == "__main__":
     )
     parser.add_argument("--dry-run", help="Don't actually change files, but output effected files instead.")
 
-    args = parser.parse_args()
+    args, unknown = parser.parse_known_args()
     
     # Get args to print
     config = vars(args)
-    del config['list'] # This is only used to allow args from Docker
     
     print("Arguments detected:", config)
 
