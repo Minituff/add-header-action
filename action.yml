@@ -20,6 +20,7 @@ outputs:
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  # Args must be passed on individual lines "--dry-run ${{ inputs.dry-run }}" would be invalid
   args:
     - --dry-run
     - ${{ inputs.dry-run }}

@@ -5,7 +5,6 @@ from re import Pattern
 from typing import List, Optional, Union
 import sys
 import argparse
-import json
 
 from headerrc import HeaderRC
 
@@ -107,20 +106,16 @@ if __name__ == "__main__":
     parser.add_argument("--dry-run", help="Don't actually change files, but output effected files instead.")
 
     args, unknown = parser.parse_known_args()
-    
-    print("Unknown: ", unknown)
-    
-    # Get args to print
-    config = vars(args)
+    config = vars(args) # Get args to print
     
     print("Arguments detected:", config)
+    if unknown:
+        print("Unknown arguments: ", unknown)
 
     dry_run = False
     if str(config.get("dry_run", False)).lower() == "true":
         dry_run = True
         
-
+    
     h = HeaderPy(dry_run=dry_run)
     h.run()
-
-    os.environ["GITHUB_OUTPUT"] = "This is a test Output"

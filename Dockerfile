@@ -2,8 +2,6 @@ FROM python:3.12-alpine
 
 LABEL maintainer="minituff (James Tufarelli)"
 
-COPY entrypoint.sh entrypoint.sh
-
 COPY requirements.txt headerrc-default.yml app/*.py /action/workspace/
 
 # Install dependencies
