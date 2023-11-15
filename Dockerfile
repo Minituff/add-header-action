@@ -7,8 +7,7 @@ COPY requirements.txt headerrc-default.yml app/*.py /action/workspace/
 # Install dependencies
 RUN \
     echo "**** Install ****" && \
-    python3 -m pip install --no-cache-dir -r /action/workspace/requirements.txt && \
-    chmod +x /entrypoint.sh
+    python3 -m pip install --no-cache-dir -r /action/workspace/requirements.txt
 
 
 # When the action runs, it will automatically map the default working directory (GITHUB_WORKSPACE) on the runner with the /github/workspace directory on the container.
@@ -17,9 +16,6 @@ VOLUME [ "/github/workspace" ]
 
 # Code file to execute when the docker container starts up
 ENTRYPOINT ["python3", "/action/workspace/main.py"]
-
-# ENTRYPOINT ["/entrypoint.sh"]
-
 
 # Do not use: USER or WORKDIR
 # https://docs.github.com/en/actions/creating-actions/dockerfile-support-for-github-actions
