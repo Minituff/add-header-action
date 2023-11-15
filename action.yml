@@ -25,5 +25,5 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
-    - "--dry-run ${{ inputs.dry-run }}"
-    - --something-else ${{ inputs.something-else }}"
+    - --dry-run ${{ inputs.dry-run }}
+    - --something-else ${{ inputs.something-else }}
