@@ -15,7 +15,7 @@ RUN \
 VOLUME [ "/github/workspace" ]
 
 # Code file to execute when the docker container starts up
-ENTRYPOINT ["python3", "./action/workspace/main.py"]
+ENTRYPOINT ["python3", "/action/workspace/main.py"]
 
 
 # Do not use: USER or WORKDIR

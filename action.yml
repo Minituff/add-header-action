@@ -9,13 +9,10 @@ branding:
 
 inputs:
   dry-run:
-    description: 'Do not actually make changes, instead effect files are viewable in the logs'
+    description: 'Do not actually make changes, instead effected files are viewable in the logs'
     required: false
     default: "false"
-  something-else:
-    description: 'something-else'
-    required: false
-    default: "false"
+
 
 outputs:
   time: # id of output
