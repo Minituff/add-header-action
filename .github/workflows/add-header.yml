@@ -18,7 +18,6 @@ jobs:
       id: add-header-action
       with:
         dry-run: true
-        something-else: false
 
     - name: Get the output of add-header-action
       run: echo "add-header-action Ouput is ${{ steps.add-header-action.outputs }}"
