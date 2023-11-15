@@ -1,2 +1,9 @@
-# add-header-action
-Add a header to any file within you repo.
+# Add header-action
+A GitHub action to add a pre-defined header to files within a repo
+
+
+# BUILD container
+```bash
+echo "alias build=\"cd /workspaces/add-header-action && docker build -t add-header-action --no-cache .\"" >> ~/.zshrc
+omz reload
+```

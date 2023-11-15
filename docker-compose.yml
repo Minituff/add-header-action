@@ -1,0 +1,12 @@
+version: '3'
+services:  
+  add-header-action:
+    image: add-header-action # Use the local image
+    container_name: add-header-action
+    volumes:
+      # This mount only works in github actions
+      - /workspaces/add-header-action:/github/workspace
+    # Use this to keep the container open so you can shell inside it
+    # entrypoint: ["tail", "-f", "/dev/null"]
+
+  

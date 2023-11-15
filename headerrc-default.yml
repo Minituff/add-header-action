@@ -1,0 +1,41 @@
+name: This file is used to set configuration for the add-header action
+
+# Automatically add everything in the .gitignore file into the untracked_files section
+# This can save lots of time because most of these files can be ignored.
+untrack_gitignore: true
+
+tracked_files:
+  - A-list-of-files-to-be-tracked.not-real
+
+# Remove items from the default values by using a !. Like "!^.git/"
+untracked_files:
+  - ^.git/ # Very important to ignore
+  - ^.gitignore
+  - headerrc-default.yml
+
+
+header: |
+  SUPER SECRET CONFIDENTIAL
+
+  [2023] - [Infinity and Beyond] ACME CO
+  All Rights Reserved.
+  
+  NOTICE: This is super secret info that
+  must be protected at all costs.
+
+
+# Group multiple items by the comment value
+file_associations_by_comment:  #Format = Comment: List[Regex for file match]
+  "#": [".gitignore$", ".yml$", ".yaml$" , ".sh$"]
+  //: [".js$", ".ts$"]
+
+
+# The item extension and the associated comment. Overrides file_associations_by_comment
+# Remember the escape charter for yml \
+file_associations_by_extension: # Format = Regex for file match: List[prefix, suffix]|str.
+  ".*\\.ya?ml$": "#"
+  ".md": ["<!--", "-->"]
+
+# For files that have 'important' first lines, use this setting to move the header below that line
+skip_lines_that_start_with: # Format = Regex for file match: List|str 
+  ".sh$": ["#!"]

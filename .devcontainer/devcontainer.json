@@ -1,0 +1,69 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/universal
+{
+	"$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json",
+	"name": "Add-header (action)",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	// "image": "mcr.microsoft.com/devcontainers/python:3",
+	"build": {
+		"context": "..", // Switch path to root
+		"dockerfile": "Dockerfile"
+	},
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	"features": {
+		"ghcr.io/devcontainers-contrib/features/zsh-plugins:0": {
+			"plugins": "copypath git dirhistory extract z colorize command-not-found colored-man-pages sudo zsh-completions zsh-autosuggestions fast-syntax-highlighting zsh-autocomplete",
+			"omzPlugins": "https://github.com/zdharma-continuum/fast-syntax-highlighting https://github.com/zsh-users/zsh-autosuggestions https://github.com/zsh-users/zsh-completions https://github.com/marlonrichert/zsh-autocomplete"
+		},
+		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
+	},
+	"containerEnv": {
+		"TEST_MODE": "true"
+	},
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"mhutchie.git-graph",
+				"visualstudioexptteam.vscodeintellicode",
+				"ms-python.python",
+				"ms-python.black-formatter",
+				"ms-azuretools.vscode-docker",
+				"aaron-bond.better-comments",
+				"njpwerner.autodocstring",
+				"pkief.material-icon-theme",
+				"redhat.vscode-yaml"
+			],
+			"settings": {
+				// "http.proxyStrictSSL": false, // Fixes extensions not installing
+				// "extensions.verifySignature": false, // Bug fix: https://github.com/microsoft/vscode-remote-release/issues/8169
+				// "http.proxySupport": "on",
+				"terminal.integrated.defaultProfile.linux": "zsh",
+				"terminal.integrated.profiles.linux": {
+					"bash": {
+						"path": "bash",
+						"icon": "terminal-bash"
+					},
+					"zsh": {
+						"path": "zsh"
+					}
+				},
+				// Python settings
+				"python.testing.pytestArgs": [
+					"."
+				],
+				"python.testing.unittestEnabled": false,
+				"python.testing.pytestEnabled": true,
+				"python.linting.enabled": true,
+				"python.formatting.provider": "none",
+				"[python]": {
+					"editor.defaultFormatter": "ms-python.black-formatter"
+				},
+				"python.languageServer": "Pylance",
+				"python.analysis.typeCheckingMode": "basic"
+			},
+			// Not running? in ~/.docker/config.json change credsStore to credStore
+			"postCreateCommand": "./.devcontainer/scripts/postCreateCommand.sh",
+			"remoteUser": "root"
+		}
+	}
+}

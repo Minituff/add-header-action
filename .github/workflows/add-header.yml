@@ -1,0 +1,26 @@
+name: Add header
+
+on:
+  workflow_dispatch: # Allow manually running
+  # push:
+  #   branches:
+  #     - main
+
+jobs:
+  build:
+    name: Add headers
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Add header action step
+      uses: ./ # Uses an action in the root directory
+      id: add-header-action
+
+    - name: Check readme (Before)
+      run: cat README.md
+
+    - name: Check readme (After)
+      run: cat README.md
+
+
