@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.PAT }}
     
     - name: Add header action step
       uses: ./ # Uses an action in the root directory
@@ -24,7 +26,6 @@ jobs:
 
     - name: Commit changes back to repo
       uses: stefanzweifel/git-auto-commit-action@v5
-      with:
-        token: ${{ secrets.PAT }}
+
 
 
