@@ -45,5 +45,5 @@ file_associations_by_extension: # Format = Regex for file match: List[prefix, su
   ".md": ["<!--", "-->"]
 
 # For files that have 'important' first lines, use this setting to move the header below that line
-skip_lines_that_start_with: # Format = Regex for file match: List|str 
+skip_lines_that_have: # Format = Regex for file match: List|str 
   ".sh$": ["#!"]

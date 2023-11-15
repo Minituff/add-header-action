@@ -7,7 +7,10 @@ on:
       - main
 
 env: 
-  FORCE_COLOR: "1" # The "FORCE_COLOR" variable, when set to 1, tells Nox to colorize itself.
+  # The "FORCE_COLOR" variable, when set to 1, tells Nox to colorize itself.
+  # This is only useful when debug-mode is True
+  FORCE_COLOR: "1"
+
 
 jobs:
   build:
@@ -25,12 +28,10 @@ jobs:
       with:
         dry-run: true
         verbose: true
-      
-
 
     - name: Commit changes back to repo
       uses: stefanzweifel/git-auto-commit-action@v5
-      # Token comes from actions/checkout
+        # Token comes from actions/checkout
 
 
 

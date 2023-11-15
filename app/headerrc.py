@@ -33,7 +33,7 @@ class HeaderRC:
         self.file_associations_by_extension = self._get_file_associations_by_extension()
         self._flatten_file_associations("file_associations_by_comment")
         self._flatten_file_associations("file_associations_by_extension")
-        self._skip_lines_that_start_with_raw = self._get_skip_lines_that_start_with_raw()
+        self._skip_lines_that_have_raw = self._get_skip_lines_that_have_raw()
         
         self.header = self._get_header()
 
@@ -58,8 +58,8 @@ class HeaderRC:
             # cprint(str(self.ignores_str), "green")
             # print("")
             
-            cprint("Skip lines", "magenta")
-            cprint(str(self._skip_lines_that_start_with_raw), "green")
+            cprint("Skip lines that have", "magenta")
+            cprint(str(self._skip_lines_that_have_raw), "green")
             
             
             
@@ -217,7 +217,7 @@ class HeaderRC:
         return new_dict
 
     def get_skip_lines_that_start_for_file(self, file_path: str) -> Optional[List[Pattern]]:
-        for pattern, val in self.skip_lines_that_start_with_regex.items():
+        for pattern, val in self.skip_lines_that_have_regex.items():
             if pattern.search(file_path):
                 if isinstance(val, list):
                     new_vals: List[Pattern] = []
@@ -250,8 +250,8 @@ class HeaderRC:
         return self._file_associations
 
     @property
-    def skip_lines_that_start_with_regex(self) -> dict[Pattern, str]:
-        return self._dict_to_regex(self._skip_lines_that_start_with_raw)
+    def skip_lines_that_have_regex(self) -> dict[Pattern, str]:
+        return self._dict_to_regex(self._skip_lines_that_have_raw)
 
     def _get_file_associations_by_extension(self) -> dict:
         d1 = dict(self.default_yml.get("file_associations_by_extension", {}))
@@ -267,9 +267,9 @@ class HeaderRC:
         d1.update(d2)  # Merge the dictionaries
         return d1
 
-    def _get_skip_lines_that_start_with_raw(self) -> dict:
-        d1 = dict(self.default_yml.get("skip_lines_that_start_with", {}))
-        d2 = dict(self.user_yml.get("skip_lines_that_start_with", {}))
+    def _get_skip_lines_that_have_raw(self) -> dict:
+        d1 = dict(self.default_yml.get("skip_lines_that_have", {}))
+        d2 = dict(self.user_yml.get("skip_lines_that_have", {}))
 
         d1.update(d2)  # Merge the dictionaries
         return d1

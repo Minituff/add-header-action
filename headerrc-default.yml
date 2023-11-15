@@ -9,7 +9,7 @@ name: This file is used to set configuration for the add-header action
 untrack_gitignore: true
 
 tracked_files:
-  - A-list-of-files-to-be-tracked.not-real
+  - a-list-of-files-to-be-tracked.fake-extension
 
 # Remove items from the default values by using a !. Like "!^.git/"
 untracked_files:
@@ -42,5 +42,5 @@ file_associations_by_extension: # Format = Regex for file match: List[prefix, su
   ".md": ["<!--", "-->"]
 
 # For files that have 'important' first lines, use this setting to move the header below that line
-skip_lines_that_start_with: # Format = Regex for file match: List|str 
+skip_lines_that_have: # Format = Regex for file match: List|str 
   ".sh$": ["^#!"]
