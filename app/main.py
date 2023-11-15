@@ -108,6 +108,8 @@ if __name__ == "__main__":
 
     args, unknown = parser.parse_known_args()
     
+    print("Unknown: ", unknown)
+    
     # Get args to print
     config = vars(args)
     
