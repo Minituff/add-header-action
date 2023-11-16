@@ -137,20 +137,20 @@ class TestHeaderRCSettings:
         h = HeaderRC(unit_test_mode=True)
         assert h.file_mode == File_Mode.OPT_OUT
 
-    def test_negagate_characters(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
-        mock_yml = {"negagate_characters": "++"}
+    def test_negate_characters(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
+        mock_yml = {"negate_characters": "++"}
         _load_default_yml.return_value = mock_yml
         _load_user_yml.return_value = mock_yml
 
         h = HeaderRC(unit_test_mode=True)
         assert h.negate_characters == "++"
 
-        mock_yml["negagate_characters"] = "!"
+        mock_yml["negate_characters"] = "!"
         _load_user_yml.return_value = mock_yml
         h = HeaderRC(unit_test_mode=True)
         assert h.negate_characters == "!"
 
-        del mock_yml["negagate_characters"]
+        del mock_yml["negate_characters"]
         _load_user_yml.return_value = mock_yml
         h = HeaderRC(unit_test_mode=True)
         assert h.negate_characters == "!"

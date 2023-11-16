@@ -418,8 +418,8 @@ class HeaderRC:
         return b1
 
     def _get_negate_characters(self) -> str:
-        n1 = self.default_yml.get("negagate_characters", "!")
-        n2 = self.user_yml.get("negagate_characters", None)
+        n1 = self.default_yml.get("negate_characters", "!")
+        n2 = self.user_yml.get("negate_characters", None)
 
         if n2 is not None:
             return n2

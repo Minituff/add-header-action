@@ -26,10 +26,10 @@ untracked_files:
   - htmlcov/
 
 # Automatically add everything in the .gitignore file into the untracked_files section
-# This can save lots of time because most of these files can be ingored.
+# This can save lots of time because most of these files can be ignored.
 untrack_gitignore: false
 
-negagate_characters: "!"
+negate_characters: "!"
 
 use_default_file_settings: true
 
