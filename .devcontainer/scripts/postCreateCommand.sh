@@ -18,12 +18,19 @@ python3 -m pip install -r requirements.txt --upgrade pip
 
 echo "Adding aliases (for convenience)..."
 
+# Go back to the workspace directory
+echo "alias home=\"cd /workspaces/add-header-action\"" >> ~/.zshrc
+
 # Build the container to test locally
-echo "alias build=\"cd /workspaces/add-header-action && docker build -t add-header-action --no-cache .\"" >> ~/.zshrc
+echo "alias build=\"home && docker build -t add-header-action --no-cache .\"" >> ~/.zshrc
 
 # Run the script locally
-echo "alias run=\"cd /workspaces/add-header-action && python3 app/main.py\"" >> ~/.zshrc
+echo "alias run=\"home && python3 app/main.py\"" >> ~/.zshrc
 
+# Run pytest and output report as hmtl
+echo "alias test=\"home && python3 -m pytest --cov app --cov-report html\"" >> ~/.zshrc
+
+clear
 
 cecho "GREEN" "-- Init complete -- Nautical development enviornment ready to go!!"
 

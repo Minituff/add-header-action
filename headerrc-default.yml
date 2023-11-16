@@ -24,6 +24,7 @@ untracked_files:
   - ^\.git/ # Very important to ignore
   - ^\.gitignore
   - ^headerrc-default.yml$
+  - \.headerrc.yml$
   - \.json$ # Most json files cannot contain comments
 
 
@@ -90,8 +91,8 @@ file_associations_by_comment:  #Format = Comment: List[Regex for file match]
     - "\\.m$"
     - "\\.mm$"
     - "\\.swift$"
-    - "\\.go$"
-    - "\\.rs$"
+    - "\\.go$"  # Go
+    - "\\.rs$"  # Rust
     - "\\.dart$"
     - "\\.php$"
     - "\\.css$"

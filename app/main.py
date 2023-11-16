@@ -7,7 +7,7 @@ import sys
 import argparse
 from termcolor import cprint
 
-from headerrc import HeaderRC, File_Mode
+from app.headerrc import HeaderRC, File_Mode
 
 
 class HeaderPy:
@@ -25,8 +25,10 @@ class HeaderPy:
     def _add_header_to_file(
         self,
         file_path: Union[Path, str],
+        relative_file_path: Union[Path, str],
         header: str,
         skip_prefixes: Optional[List[Pattern]] = None,
+        prefix_suffix: tuple[str, str] = ("", "")
     ) -> None:
         if isinstance(file_path, str):
             file_path = Path(file_path)
@@ -34,11 +36,24 @@ class HeaderPy:
         # Read the beginning of the file to check for the header
         header_bytes = sys.getsizeof(header) + 100
 
-        with file_path.open("r+") as file:
-            start_of_file = file.read(header_bytes)
+        with file_path.open("r+", encoding='utf-8') as file:
+            try:
+                start_of_file = file.read(header_bytes)
+            except UnicodeDecodeError as e:
+                if self.verbose is True:
+                    cprint(f"Can't decode - {file_path}", "red")
+                return
+            
             if header in start_of_file:
+                if self.verbose or self.dry_run:
+                    print(f"Header already in - {relative_file_path}")
                 return  # Header already present, no need to add it
-
+            
+            if self.dry_run:
+                print(f"Would add header to - {relative_file_path} - {prefix_suffix}")
+                return
+            print(f"Adding header to - {relative_file_path} - {prefix_suffix}")
+                
             file.seek(0, 0)  # Rewind to start of the file for re-reading
             contents = file.read()  # Read the entire file
             lines = contents.split("\n")
@@ -91,12 +106,8 @@ class HeaderPy:
 
                 header, prefix, suffix = self.header_rc.get_header_for_file(file)
                 skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
-
-                if self.dry_run:
-                    print("Would Process -", rel_file_path, f" - {prefix} {suffix}")
-                else:
-                    print("Processing -", rel_file_path, f"- {prefix} {suffix}")
-                    self._add_header_to_file(full_file_path, header, skip_prefixes)
+                
+                self._add_header_to_file(full_file_path, rel_file_path, header, skip_prefixes, (prefix, suffix))
 
     def _loop_through_files_opt_out(self, re_ignore_patterns: List[Pattern]) -> None:
         base_dir = self.header_rc.work_path
@@ -130,15 +141,10 @@ class HeaderPy:
 
                 relative_file_path = Path(file_path)
 
-
                 header, prefix, suffix = self.header_rc.get_header_for_file(file)
                 skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
-
-                if self.dry_run:
-                    print("Would Process -", relative_file_path, f" - {prefix} {suffix}")
-                else:
-                    print("Processing -", relative_file_path, f"- {prefix} {suffix}")
-                    self._add_header_to_file(full_file_path, header, skip_prefixes)
+                
+                self._add_header_to_file(full_file_path, relative_file_path, header, skip_prefixes, (prefix, suffix))
 
 
 def _get_bool(config: dict[str, Any], input_str: str, default=False) -> bool:

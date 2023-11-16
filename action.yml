@@ -18,14 +18,13 @@ inputs:
     default: "false"
 
 outputs:
-  time: # id of output
-    description: 'The time we greeted you'
+  none: # id of output
+    description: 'This action has no outputs'
 
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  # Args must be passed on individual lines "--dry-run ${{ inputs.dry-run }}" would be invalid
-  args:
+  args: # Args must be passed on individual lines. For example: "--dry-run ${{ inputs.dry-run }}" would be invalid
     - --dry-run
     - ${{ inputs.dry-run }}
     - --verbose
