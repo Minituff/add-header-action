@@ -1,6 +1,6 @@
 import pytest
 import mock
-from mock import MagicMock
+from mock import MagicMock, mock_open
 
 from app.headerrc import HeaderRC, File_Mode
 
@@ -14,8 +14,7 @@ class TestHeaderRCSettings:
         """
         Runs 1 time before all tests in this class
         """
-        # TODO: Test use_default_file_settings
-        # TODO: Test untrack_gitignore_enabled
+        pass
 
     def test_negate_ignores(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
         mock_yml = {"untracked_files": [r"^README.md$", r"test.txt"], "untrack_gitignore": False}
@@ -245,30 +244,77 @@ class TestHeaderRCSettings:
             "skip_lines_that_have": {".sh$": ["#!"]},
         }
         mock_user_yml = {
-            "skip_lines_that_have": { ".test": ["!test"], ".sh$": ["#!/bin/sh"]},
+            "skip_lines_that_have": {".test": ["!test"], ".sh$": ["#!/bin/sh"]},
         }
 
         _load_default_yml.return_value = mock_default_yml
         _load_user_yml.return_value = mock_user_yml
 
         h = HeaderRC(unit_test_mode=True)
+
         assert h._skip_lines_that_have_raw == {
             ".test": ["!test"],
             ".sh$": ["#!", "#!/bin/sh"],
         }
-        
-    def test_negate_skip_lines_that_have_raw(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
-        mock_default_yml = {
-            "skip_lines_that_have": {".test": ["!test"], ".sh$": ["#!"]},
-        }
-        mock_user_yml = {
-            "skip_lines_that_have": {"!.sh$": ["#!"]},
-        }
 
-        _load_default_yml.return_value = mock_default_yml
-        _load_user_yml.return_value = mock_user_yml
+    @mock.patch("builtins.open", mock_open(read_data="# Environments\n \nbaz\n foo\n"))
+    def test_untrack_gitignore(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
+        h = HeaderRC(
+            unit_test_mode=True,
+        )
+
+        mock_yml = {"untracked_files": [r"^README.md$", r"test.txt"], "untrack_gitignore": False}
+        mock_yml_user = {"file_mode": "opt-out", "untracked_files": [r"!^README.md$", r"^Dockerfile$", r"test.txt"]}
+        mock_yml["file_mode"] = "opt-out"
+
+        _load_default_yml.return_value = mock_yml
+        _load_user_yml.return_value = mock_yml_user
 
         h = HeaderRC(unit_test_mode=True)
-        assert h._skip_lines_that_have_raw == {
-            ".test": ["!test"],
+        assert set(h.ignores_str) == set([r"^Dockerfile$", r"test.txt"])
+
+        mock_yml_user["untrack_gitignore"] = True
+
+        _load_user_yml.return_value = mock_yml_user
+
+        h = HeaderRC(unit_test_mode=True)
+        assert set(h.ignores_str) == set([r"^Dockerfile$", r"test.txt", "baz", "foo"])
+
+    def test_use_default_file_settings(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
+        mock_yml = {
+            "untracked_files": [r"^README.md$", r"test.txt"],
+            "tracked_files": [r"^\.git/", r"^\.gitignore"],
+            "file_associations_by_comment":{"//": [".js$", ".ts$"]},
+            "file_associations_by_extension": {".md": ["<!--", "-->"]},
+            "skip_lines_that_have":  {".sh$": ["#&"]},
         }
+        mock_yml_user = {"use_default_file_settings": True, "untrack_gitignore": False, "file_mode": "opt-out"}
+
+        _load_default_yml.return_value = mock_yml
+        _load_user_yml.return_value = mock_yml_user
+        
+        h = HeaderRC(unit_test_mode=True)
+        assert set(h.ignores_str) == set([r"^README.md$", r"test.txt"])
+        assert h.file_associations == {
+            ".js$": "//",
+            ".ts$": "//",
+            ".md": ["<!--", "-->"],
+        }
+        assert h._skip_lines_that_have_raw == {".sh$": ["#&"]}
+        
+        mock_yml_user["file_mode"] = "opt-in"
+        
+        h = HeaderRC(unit_test_mode=True)
+        assert set(h.accepts_str) == set([r"^\.git/", r"^\.gitignore"])
+        
+        
+        mock_yml_user["use_default_file_settings"] = False
+        h = HeaderRC(unit_test_mode=True)
+        assert set(h.accepts_str) == set()
+        assert h.file_associations == {}
+        assert h._skip_lines_that_have_raw == {}
+        
+        mock_yml_user["file_mode"] = "opt-out"
+        h = HeaderRC(unit_test_mode=True)
+        assert set(h.ignores_str) == set()
+        

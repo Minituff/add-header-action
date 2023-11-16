@@ -306,7 +306,7 @@ class HeaderRC:
 
                 break
         return None
-    
+
     def _merge_dict_filter_key(self, d1: dict, d2: dict) -> None:
         # Prepare a set to track keys that should be removed
         removal_set = set()
@@ -398,8 +398,6 @@ class HeaderRC:
             return File_Mode.OPT_IN
         elif f2 == "":
             return File_Mode.OPT_OUT
-        else:
-            cprint(f"ERROR: {f1} is not a valid file_mode. Options are [opt-out, opt-in]", "red")
 
         return File_Mode.OPT_OUT
 
