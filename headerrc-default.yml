@@ -39,6 +39,7 @@ header: |
 # Group multiple items by the comment value
 file_associations_by_comment:  #Format = Comment: List[Regex for file match]
   "#": # Shell-like single-line comment
+    - "^.gitignore$"
     - "\\.*\\.ya?ml$"
     - "\\.sh$"
     - "\\.bash$"

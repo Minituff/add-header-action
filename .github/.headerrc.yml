@@ -39,6 +39,8 @@ header: |
 file_associations_by_comment:  #Format = Comment: List[Regex for file match]
   "#": 
     - "^.gitignore$"
+    - "!^.gitignore$" # <--- Negate items like this (it must match exactly the default value)
+    - ".gitignore$" # <-- Because it allows reassignment
   "//": 
     - ".js$"
     - ".ts$"

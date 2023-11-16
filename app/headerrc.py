@@ -307,13 +307,39 @@ class HeaderRC:
     @property
     def skip_lines_that_have_regex(self) -> dict[Pattern, str]:
         return self._dict_to_regex(self._skip_lines_that_have_raw)
+    
+    @staticmethod
+    def _merge_dict(d1: dict, d2: dict) -> None:
+        # Prepare a set to track values that should be removed
+            removal_set = set()
 
+            # Identify values in d2 starting with '!' and add their counterparts to the removal set
+            for values in d2.values():
+                removal_set.update(val.lstrip('!') for val in values if val.startswith('!'))
+
+            # Remove identified values from d1
+            for key in d1:
+                if key in d2:
+                    d1[key] = [val for val in d1[key] if val not in removal_set]
+
+            # Merge d2 into d1, excluding values that start with '!'
+            for key, values in d2.items():
+                filtered_values = [val for val in values if not val.startswith('!')]
+                if key in d1:
+                    if not isinstance(d1[key], list):
+                        d1[key] = [d1[key]]
+                    d1[key].extend(val for val in filtered_values if val not in removal_set)
+                else:
+                    d1[key] = filtered_values
+
+            return d1
+                
     def _get_file_associations_by_extension(self) -> dict:
         # TODO: Same items are getting overwritten
         d1 = dict(self.default_yml.get("file_associations_by_extension", {}))
         d2 = dict(self.user_yml.get("file_associations_by_extension", {}))
 
-        d1.update(d2)  # Merge the dictionaries
+        self._merge_dict(d1, d2)  # Merge the dictionaries
         return d1
 
     def _get_file_associations_by_comment(self) -> dict:
@@ -321,7 +347,7 @@ class HeaderRC:
         d1 = dict(self.default_yml.get("file_associations_by_comment", {}))
         d2 = dict(self.user_yml.get("file_associations_by_comment", {}))
 
-        d1.update(d2)  # Merge the dictionaries
+        self._merge_dict(d1, d2)  # Merge the dictionaries
         return d1
 
     def _get_skip_lines_that_have_raw(self) -> dict:
@@ -329,7 +355,7 @@ class HeaderRC:
         d1 = dict(self.default_yml.get("skip_lines_that_have", {}))
         d2 = dict(self.user_yml.get("skip_lines_that_have", {}))
 
-        d1.update(d2)  # Merge the dictionaries
+        self._merge_dict(d1, d2)  # Merge the dictionaries
         return d1
 
     def _get_file_mode(self) -> File_Mode:
