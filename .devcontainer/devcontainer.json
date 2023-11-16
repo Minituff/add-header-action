@@ -54,7 +54,8 @@
 				"files.associations": {
 					"*.env": "shellscript",
 					"*.json5": "jsonc"
-				}
+				},
+				"black-formatter.args": ["--line-length", "120"]
 			}
 		}
 	},

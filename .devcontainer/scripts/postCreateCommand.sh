@@ -32,7 +32,7 @@ echo "alias test=\"home && python3 -m pytest --cov app --cov-report html\"" >> ~
 
 clear
 
-cecho "GREEN" "-- Init complete -- Nautical development enviornment ready to go!!"
+cecho "GREEN" "-- Init complete -- Development enviornment ready to go!!"
 
 
 zsh && omz reload

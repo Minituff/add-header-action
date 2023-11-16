@@ -15,12 +15,15 @@ untracked_files:
   - ^.devcontainer/
   - .pytest_cache
   
+  # Files used in this repo
   - docker-compose.yml
   - action.yml
   - __init__.py
   - requirements.txt
   - app/
   - ^Dockerfile$
+  - test/
+  - htmlcov/
 
 # Automatically add everything in the .gitignore file into the untracked_files section
 # This can save lots of time because most of these files can be ingored.

@@ -28,7 +28,7 @@ class HeaderPy:
         relative_file_path: Union[Path, str],
         header: str,
         skip_prefixes: Optional[List[Pattern]] = None,
-        prefix_suffix: tuple[str, str] = ("", "")
+        prefix_suffix: tuple[str, str] = ("", ""),
     ) -> None:
         if isinstance(file_path, str):
             file_path = Path(file_path)
@@ -36,24 +36,24 @@ class HeaderPy:
         # Read the beginning of the file to check for the header
         header_bytes = sys.getsizeof(header) + 100
 
-        with file_path.open("r+", encoding='utf-8') as file:
+        with file_path.open("r+", encoding="utf-8") as file:
             try:
                 start_of_file = file.read(header_bytes)
             except UnicodeDecodeError as e:
                 if self.verbose is True:
                     cprint(f"Can't decode - {file_path}", "red")
                 return
-            
+
             if header in start_of_file:
                 if self.verbose or self.dry_run:
                     print(f"Header already in - {relative_file_path}")
                 return  # Header already present, no need to add it
-            
+
             if self.dry_run:
                 print(f"Would add header to - {relative_file_path} - {prefix_suffix}")
                 return
             print(f"Adding header to - {relative_file_path} - {prefix_suffix}")
-                
+
             file.seek(0, 0)  # Rewind to start of the file for re-reading
             contents = file.read()  # Read the entire file
             lines = contents.split("\n")
@@ -62,7 +62,7 @@ class HeaderPy:
             if skip_prefixes:
                 if self.verbose:
                     cprint(f"skip_lines_that_start_with enabled for {file_path}" "yellow")
-                    
+
                 for i, line in enumerate(lines):
                     for pattern in skip_prefixes:
                         if pattern.search(line):
@@ -74,11 +74,7 @@ class HeaderPy:
             else:
                 header_formatted = header.rstrip("\r\n") + "\n\n"
 
-            modified_content = (
-                "\n".join(lines[:skip_index])
-                + header_formatted
-                + "\n".join(lines[skip_index:])
-            )
+            modified_content = "\n".join(lines[:skip_index]) + header_formatted + "\n".join(lines[skip_index:])
             file.seek(0, 0)  # Move to the start of the file
             file.write(modified_content)  # Write the modified content
             file.truncate()  # Truncate in case the new content is shorter
@@ -106,7 +102,7 @@ class HeaderPy:
 
                 header, prefix, suffix = self.header_rc.get_header_for_file(file)
                 skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
-                
+
                 self._add_header_to_file(full_file_path, rel_file_path, header, skip_prefixes, (prefix, suffix))
 
     def _loop_through_files_opt_out(self, re_ignore_patterns: List[Pattern]) -> None:
@@ -143,7 +139,7 @@ class HeaderPy:
 
                 header, prefix, suffix = self.header_rc.get_header_for_file(file)
                 skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
-                
+
                 self._add_header_to_file(full_file_path, relative_file_path, header, skip_prefixes, (prefix, suffix))
 
 
@@ -153,26 +149,24 @@ def _get_bool(config: dict[str, Any], input_str: str, default=False) -> bool:
     elif str(config.get(input_str, default)).lower() == "false":
         return False
     return default
-    
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(
-        description="Add header action",
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        add_help=False
+        description="Add header action", formatter_class=argparse.RawDescriptionHelpFormatter, add_help=False
     )
     parser.add_argument("--dry-run", help="Don't actually change files, but output effected files instead.")
     parser.add_argument("--verbose", help="Add more output to the console for debugging.")
 
     args, unknown = parser.parse_known_args()
-    config = vars(args) # Get args to print
-    
+    config = vars(args)  # Get args to print
+
     print("Arguments detected:", config)
     if unknown:
         print("Unknown arguments: ", unknown)
-        
+
     dry_run = _get_bool(config, "dry_run")
     verbose = _get_bool(config, "verbose")
-    
+
     h = HeaderPy(verbose=verbose, dry_run=dry_run)
     h.run()
