@@ -56,6 +56,7 @@ file_associations_by_comment:  #Format = Comment: List[Regex for file match]
 
 # The item extension and the assocated comment. Overrides file_associations_by_comment
 # Remember the escape charter for yml \
+# Here, you can only negate items by their key
 file_associations_by_extension: # Format = Regex for file match: List[prefix, suffix]|str.
   ".*\\.ya?ml$": "#"
   ".md": ["<!--", "-->"]

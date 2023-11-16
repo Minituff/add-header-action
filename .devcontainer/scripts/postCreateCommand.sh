@@ -28,7 +28,7 @@ echo "alias build=\"home && docker build -t add-header-action --no-cache .\"" >>
 echo "alias run=\"home && python3 app/main.py\"" >> ~/.zshrc
 
 # Run pytest and output report as hmtl
-echo "alias test=\"home && python3 -m pytest --cov app --cov-report html\"" >> ~/.zshrc
+echo "alias test=\"home && clear && python3 -m pytest -vs --cov app --cov-report html\"" >> ~/.zshrc
 
 clear
 

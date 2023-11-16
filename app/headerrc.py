@@ -306,8 +306,32 @@ class HeaderRC:
 
                 break
         return None
+    
+    def _merge_dict_filter_key(self, d1: dict, d2: dict) -> None:
+        # Prepare a set to track keys that should be removed
+        removal_set = set()
 
-    def _merge_dict(self, d1: dict, d2: dict) -> None:
+        # Identify keys in d2 starting with '!' and add their counterparts to the removal set
+        for key in d2:
+            if key.startswith(self.negate_characters):
+                removal_set.add(key.lstrip(self.negate_characters))
+
+        # Remove identified keys from d1
+        for key in list(d1):  # Use list to avoid 'dictionary changed size during iteration' error
+            if key in removal_set:
+                del d1[key]
+
+        # Merge d2 into d1, excluding keys that start with "!"
+        for key, values in d2.items():
+            if not key.startswith(self.negate_characters):
+                if key in d1:
+                    if not isinstance(d1[key], list):
+                        d1[key] = [d1[key]]
+                    d1[key].extend(val for val in values)
+                else:
+                    d1[key] = values
+
+    def _merge_dict_filter_val(self, d1: dict, d2: dict) -> None:
         # Prepare a set to track values that should be removed
         removal_set = set()
 
@@ -338,7 +362,7 @@ class HeaderRC:
         if self.use_default_file_settings is False:
             d1 = {}  # Empty the default settings
 
-        self._merge_dict(d1, d2)  # Merge the dictionaries
+        self._merge_dict_filter_key(d1, d2)  # Merge the dictionaries
         return d1
 
     def _get_file_associations_by_comment(self) -> dict:
@@ -347,7 +371,7 @@ class HeaderRC:
         if self.use_default_file_settings is False:
             d1 = {}  # Empty the default settings
 
-        self._merge_dict(d1, d2)  # Merge the dictionaries
+        self._merge_dict_filter_val(d1, d2)  # Merge the dictionaries
         return d1
 
     def _get_skip_lines_that_have_raw(self) -> dict:
@@ -356,7 +380,7 @@ class HeaderRC:
         if self.use_default_file_settings is False:
             d1 = {}  # Empty the default settings
 
-        self._merge_dict(d1, d2)  # Merge the dictionaries
+        self._merge_dict_filter_key(d1, d2)  # Merge the dictionaries
         return d1
 
     def _get_file_mode(self) -> File_Mode:
