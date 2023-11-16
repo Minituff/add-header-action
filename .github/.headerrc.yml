@@ -10,6 +10,7 @@ tracked_files:
 
 # Remove items from the default values by using a !. Like "!^.git/"
 untracked_files:
+  - ^\.git/ # Very important to ignore
   - ^.github/
   - ^.devcontainer/
   - .pytest_cache
@@ -24,6 +25,10 @@ untracked_files:
 # Automatically add everything in the .gitignore file into the untracked_files section
 # This can save lots of time because most of these files can be ingored.
 untrack_gitignore: false
+
+negagate_characters: "!"
+
+use_default_file_settings: false
 
 header: |
   SUPER SECRET CONFIDENTIAL

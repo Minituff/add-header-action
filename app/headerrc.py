@@ -32,6 +32,9 @@ class HeaderRC:
 
         self._load_default_yml()
         self._load_user_yml()
+        
+        self.negate_characters: str = self._get_negate_characters()
+        self.use_default_file_settings: bool = self._get_use_default_file_settings()
         self.untrack_gitignore_enabled = self._get_untrack_gitignore_enabled()
         self.file_associations_by_comment = self._get_file_associations_by_comment()
         self.file_associations_by_extension = self._get_file_associations_by_extension()
@@ -41,7 +44,6 @@ class HeaderRC:
         
         self.header = self._get_header()
         
-        # TODO: Allow overrides
         self.file_mode: File_Mode = self._get_file_mode()
 
         self.ignores: list[Pattern] = []
@@ -55,27 +57,37 @@ class HeaderRC:
             self._load_accepts()
         
         if self.verbose:
-            cprint("Begin header", "magenta")
+            cprint("Header:", "magenta")
             cprint(self.header, "green")
             print("")
             
-            cprint("File associations", "magenta")
+            if self.file_mode == File_Mode.OPT_OUT:
+                cprint("File-mode: ", "magenta", end="")
+                cprint("opt-out\n", "green")
+                
+            if self.file_mode == File_Mode.OPT_IN:
+                cprint("File-mode: ", "magenta", end="")
+                cprint("opt-in\n", "green")
+            
+            cprint("Negate characters: ", "magenta", end="")
+            cprint(f"{str(self.negate_characters)}\n", "green")
+            
+            cprint("Use default file settings: ", "magenta", end="")
+            cprint(f"{str(self.use_default_file_settings)}\n", "green")
+            
+            cprint("File associations:", "magenta")
             cprint(str(self._file_associations), "green")
             print("")
             
             if self.file_mode == File_Mode.OPT_OUT:
-                cprint("File-mode = opt-out\n", "magenta")
-                cprint("Untracked files", "magenta")
-                cprint(str(self.ignores_str), "green")
-                print("")
+                cprint("Untracked (blacklisted) files:", "magenta")
+                cprint(f"{str(self.ignores_str)}\n", "green")
                 
             if self.file_mode == File_Mode.OPT_IN:
-                cprint("File-mode = opt-in\n", "magenta")
-                cprint("Tracked files", "magenta")
-                cprint(str(self.accepts_str), "green")
-                print("")
+               cprint("Tracked (whitelisted) files:", "magenta")
+               cprint(f"{str(self.accepts_str)}\n", "green")
             
-            cprint("Skip lines that have", "magenta")
+            cprint("Skip lines that have:", "magenta")
             cprint(str(self._skip_lines_that_have_raw), "green")
 
     def _load_default_yml(self):
@@ -141,7 +153,7 @@ class HeaderRC:
 
     def _load_ignores(self) -> list[Pattern]:
         ignores1 = self.default_yml.get("untracked_files", [])
-        if ignores1 is None:
+        if ignores1 is None or self.use_default_file_settings is False:
             ignores1 = []
         ignores1 = set(list(ignores1))
         
@@ -156,7 +168,7 @@ class HeaderRC:
         ignores_to_remove = []
         ignores_filtered = []
         for ig in ignores:
-            if ig.startswith("!") and ig[1:] in ignores:
+            if ig.startswith(self.negate_characters) and ig[1:] in ignores:
                 ignores_to_remove.append(ig[1:])
                 continue
             ignores_filtered.append(ig)
@@ -175,7 +187,7 @@ class HeaderRC:
     
     def _load_accepts(self) -> list[Pattern]:
         accepts1 = self.default_yml.get("tracked_files", [])
-        if accepts1 is None:
+        if accepts1 is None or self.use_default_file_settings is False:
             accepts1 = []
         accepts1 = set(list(accepts1))
         
@@ -191,7 +203,7 @@ class HeaderRC:
         accepts_to_remove = []
         accepts_filtered = []
         for ac in accepts:
-            if ac.startswith("!") and ac[1:] in accepts:
+            if ac.startswith(self.negate_characters) and ac[1:] in accepts:
                 accepts_to_remove.append(ac[1:])
                 continue
             accepts_filtered.append(ac)
@@ -284,47 +296,23 @@ class HeaderRC:
 
                 break
         return None
-
-    def _get_untrack_gitignore_enabled(self) -> bool:
-        val1 = self.default_yml.get("untrack_gitignore", None)
-        val2 = self.user_yml.get("untrack_gitignore", None)
-
-        if val2 is not None:
-            return val2
-        if val1 is not None:
-            return val1
-
-        return True  # Default value
-
-    @property
-    def file_associations_regex(self) -> dict[Pattern, str]:
-        return self._dict_to_regex(self.file_associations)
-
-    @property
-    def file_associations(self) -> dict:
-        return self._file_associations
-
-    @property
-    def skip_lines_that_have_regex(self) -> dict[Pattern, str]:
-        return self._dict_to_regex(self._skip_lines_that_have_raw)
     
-    @staticmethod
-    def _merge_dict(d1: dict, d2: dict) -> None:
+    def _merge_dict(self, d1: dict, d2: dict) -> None:
         # Prepare a set to track values that should be removed
             removal_set = set()
 
             # Identify values in d2 starting with '!' and add their counterparts to the removal set
             for values in d2.values():
-                removal_set.update(val.lstrip('!') for val in values if val.startswith('!'))
+                removal_set.update(val.lstrip(self.negate_characters) for val in values if val.startswith(self.negate_characters))
 
             # Remove identified values from d1
             for key in d1:
                 if key in d2:
                     d1[key] = [val for val in d1[key] if val not in removal_set]
 
-            # Merge d2 into d1, excluding values that start with '!'
+            # Merge d2 into d1, excluding values that start with "!"
             for key, values in d2.items():
-                filtered_values = [val for val in values if not val.startswith('!')]
+                filtered_values = [val for val in values if not val.startswith(self.negate_characters)]
                 if key in d1:
                     if not isinstance(d1[key], list):
                         d1[key] = [d1[key]]
@@ -332,28 +320,29 @@ class HeaderRC:
                 else:
                     d1[key] = filtered_values
 
-            return d1
-                
     def _get_file_associations_by_extension(self) -> dict:
-        # TODO: Same items are getting overwritten
         d1 = dict(self.default_yml.get("file_associations_by_extension", {}))
         d2 = dict(self.user_yml.get("file_associations_by_extension", {}))
+        if self.use_default_file_settings is False:
+            d1 = {} # Empty the default settings 
 
         self._merge_dict(d1, d2)  # Merge the dictionaries
         return d1
 
     def _get_file_associations_by_comment(self) -> dict:
-        # TODO: Same items are getting overwritten
         d1 = dict(self.default_yml.get("file_associations_by_comment", {}))
         d2 = dict(self.user_yml.get("file_associations_by_comment", {}))
+        if self.use_default_file_settings is False:
+            d1 = {} # Empty the default settings 
 
         self._merge_dict(d1, d2)  # Merge the dictionaries
         return d1
 
     def _get_skip_lines_that_have_raw(self) -> dict:
-        # TODO: Same items are getting overwritten
         d1 = dict(self.default_yml.get("skip_lines_that_have", {}))
         d2 = dict(self.user_yml.get("skip_lines_that_have", {}))
+        if self.use_default_file_settings is False:
+            d1 = {} # Empty the default settings 
 
         self._merge_dict(d1, d2)  # Merge the dictionaries
         return d1
@@ -379,6 +368,30 @@ class HeaderRC:
         
         return File_Mode.OPT_OUT
     
+    def _get_untrack_gitignore_enabled(self) -> bool:
+        val1 = self.default_yml.get("untrack_gitignore", True)
+        val2 = self.user_yml.get("untrack_gitignore", None)
+
+        if val2 is not None:
+            return val2
+        return val1
+
+    def _get_use_default_file_settings(self) -> bool:
+        b1 = bool(self.default_yml.get("use_default_file_settings", True))
+        b2 = bool(self.user_yml.get("use_default_file_settings",  None))
+        
+        if b2 is not None:
+            return b2
+        return b1
+    
+    def _get_negate_characters(self) -> str:
+        n1 = str(self.default_yml.get("negagate_characters", "!"))
+        n2 = str(self.user_yml.get("negagate_characters", None))
+
+        if n2 is not None:
+            return n2
+        return n1
+    
     def _get_header(self) -> str:
         h1 = str(self.default_yml.get("header", ""))
         h2 = str(self.user_yml.get("header", ""))
@@ -386,3 +399,15 @@ class HeaderRC:
         if not h2:
             return h1
         return h2
+
+    @property
+    def file_associations_regex(self) -> dict[Pattern, str]:
+        return self._dict_to_regex(self.file_associations)
+
+    @property
+    def file_associations(self) -> dict:
+        return self._file_associations
+
+    @property
+    def skip_lines_that_have_regex(self) -> dict[Pattern, str]:
+        return self._dict_to_regex(self._skip_lines_that_have_raw)

@@ -1,3 +1,9 @@
+# SUPER SECRET CONFIDENTIAL 
+# [2023] - [Infinity and Beyond] ACME CO 
+# All Rights Reserved. 
+# NOTICE: This is super secret info that 
+# must be protected at all costs. 
+
 # This file containers the default values for this action.
 # Any items added to the .headerrc file will be *merged* with this one.
 # Duplicate values will be overwritten from the .headerrc.
@@ -24,6 +30,12 @@ untracked_files:
 # Automatically add everything in the .gitignore file into the untracked_files section
 # This can save lots of time because most of these files can be ignored.
 untrack_gitignore: true
+
+negagate_characters: "!"
+
+# With this enabled, the following settings are not loaded, and must be provided from the .headerrc file.
+# tracked_files, untracked_files, file_associations_by_comment, file_associations_by_extension, skip_lines_that_have
+use_default_file_settings: true
 
 # The header to be inserted in matching files
 header: |
