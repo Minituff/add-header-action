@@ -14,8 +14,8 @@ untracked_files:
   - ^.github/
   - ^.devcontainer/
   - .pytest_cache
-  
-  # Files used in this repo
+  - ^headerrc-default.yml$
+  - \.headerrc.yml$
   - docker-compose.yml
   - action.yml
   - __init__.py

@@ -17,8 +17,7 @@ tracked_files:
 untracked_files:
   - ^\.git/ # Very important to ignore
   - ^\.gitignore
-  - ^headerrc-default.yml$
-  - \.headerrc.yml$
+  - __init__.py$ # These are just empty files
   - \.json$ # Most json files cannot contain comments
 
 
