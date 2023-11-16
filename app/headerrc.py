@@ -20,18 +20,18 @@ class HeaderRC:
         self.home_path = Path("/app/")
         self.work_path = Path("/github/workspace")
         if TEST_MODE == "true" or TEST_MODE == True:
-            cprint("--- Running in TEST mode ---", "yellow")
+            # cprint("--- Running in TEST mode ---", "yellow")
             self.work_path = Path()
             self.home_path = Path()
 
-        self.default_yml: Any
-        self.user_yml: Any
+        self.default_yml: Any = self._load_default_yml()
+        self.user_yml: Any  = self._load_user_yml()
         self._file_associations: dict = {}
         self.file_associations_by_comment: dict = {}
         self.file_associations_by_extension: dict = {}
 
-        self._load_default_yml()
-        self._load_user_yml()
+        
+        
         
         self.negate_characters: str = self._get_negate_characters()
         self.use_default_file_settings: bool = self._get_use_default_file_settings()
@@ -100,7 +100,7 @@ class HeaderRC:
             exit(1)
 
         with open(p, "r") as file:
-            self.default_yml = yaml.safe_load(file)
+            return yaml.safe_load(file)
 
     def _load_user_yml(self):
         file_name = ".headerrc.yml"
@@ -108,6 +108,8 @@ class HeaderRC:
         p1 = p / f".github/{file_name}"
         p2 = p / f"{file_name}"
 
+        user_yml = {}
+        
         if not p1.exists() and not p2.exists():
             print("ERROR: Could not find configuration file.")
             print("Valid locations are:")
@@ -118,18 +120,20 @@ class HeaderRC:
         if p1.exists():
             print(f"Found {p1}")
             with open(p1, "r") as file:
-                self.user_yml = yaml.safe_load(file)
+                user_yml = yaml.safe_load(file)
 
         if p2.exists():
             print(f"Found {p2}")
             with open(p2, "r") as file:
-                self.user_yml = yaml.safe_load(file)
+                user_yml = yaml.safe_load(file)
                 
         if p1.exists() and p2.exists():
             print("WARNING: Found 2 configuration files.")
             print(f" - {p1}")
             print(f" - {p2}")
             print(f"WARNING {p2} will be used. All others are ignored")
+            
+        return user_yml
 
     def _handle_untrack_gitignore(self):
         if not self.untrack_gitignore_enabled:
@@ -351,14 +355,11 @@ class HeaderRC:
     def _get_file_mode(self) -> File_Mode:
         f1 = str(self.default_yml.get("file_mode", ""))
         f2 = str(self.user_yml.get("file_mode", ""))
-
-        if not f2:
+        if f1:
             if f1 == "opt-out":
                 return File_Mode.OPT_OUT
             elif f1 == "opt-in":
                 return File_Mode.OPT_IN
-            else:
-                cprint(f"ERROR: {f1} is not a valid file_mode. Options are [opt-out, opt-in]", "red")
             
         if f2 == "opt-out":
             return File_Mode.OPT_OUT
@@ -378,16 +379,16 @@ class HeaderRC:
         return val1
 
     def _get_use_default_file_settings(self) -> bool:
-        b1 = bool(self.default_yml.get("use_default_file_settings", True))
-        b2 = bool(self.user_yml.get("use_default_file_settings",  None))
+        b1 = self.default_yml.get("use_default_file_settings", True)
+        b2 = self.user_yml.get("use_default_file_settings",  None)
         
         if b2 is not None:
             return b2
         return b1
     
     def _get_negate_characters(self) -> str:
-        n1 = str(self.default_yml.get("negagate_characters", "!"))
-        n2 = str(self.user_yml.get("negagate_characters", None))
+        n1 = self.default_yml.get("negagate_characters", "!")
+        n2 = self.user_yml.get("negagate_characters", None)
 
         if n2 is not None:
             return n2
