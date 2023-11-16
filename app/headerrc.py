@@ -17,14 +17,14 @@ class File_Mode(Enum):
 
 
 class HeaderRC:
-    def __init__(self, verbose=False, unit_test_mode=False, use_default_paths=True) -> None:
+    def __init__(self, verbose=False, unit_test_mode=False, test_mode=False, use_default_paths=True) -> None:
         self.verbose = verbose
         self.home_path = Path("/app/")
         self.work_path = Path("/github/workspace")
-        if TEST_MODE == "true" or TEST_MODE == True:
+        if TEST_MODE == "true" or TEST_MODE == True or test_mode == True:
             if unit_test_mode is False:
                 cprint("--- Running in TEST mode ---", "yellow")
-            if use_default_paths is False:
+            if use_default_paths is True:
                 self.work_path = Path()
                 self.home_path = Path()
 
@@ -36,7 +36,7 @@ class HeaderRC:
 
         self.negate_characters: str = self._get_negate_characters()
         self.use_default_file_settings: bool = self._get_use_default_file_settings()
-        self.untrack_gitignore_enabled = self._get_untrack_gitignore_enabled()
+        self.untrack_gitignore = self._get_untrack_gitignore()
         self.file_associations_by_comment = self._get_file_associations_by_comment()
         self.file_associations_by_extension = self._get_file_associations_by_extension()
         self._flatten_file_associations("file_associations_by_comment")
@@ -142,7 +142,7 @@ class HeaderRC:
         return user_yml
 
     def _handle_untrack_gitignore(self):
-        if not self.untrack_gitignore_enabled:
+        if not self.untrack_gitignore:
             return []
 
         patterns = []
@@ -372,12 +372,14 @@ class HeaderRC:
             return File_Mode.OPT_OUT
         elif f2 == "opt-in":
             return File_Mode.OPT_IN
+        elif f2 == "":
+            return File_Mode.OPT_OUT
         else:
             cprint(f"ERROR: {f1} is not a valid file_mode. Options are [opt-out, opt-in]", "red")
 
         return File_Mode.OPT_OUT
 
-    def _get_untrack_gitignore_enabled(self) -> bool:
+    def _get_untrack_gitignore(self) -> bool:
         val1 = self.default_yml.get("untrack_gitignore", True)
         val2 = self.user_yml.get("untrack_gitignore", None)
 

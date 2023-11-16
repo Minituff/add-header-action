@@ -2,9 +2,9 @@ name: Python Lint & Test
 
 on:
   workflow_dispatch: # Allow manually running
-  # push:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -19,12 +19,10 @@ jobs:
         python-version: '3.12'
       
     - name: Install dependencies
-      run: |
-        python3 -m pip install -r requirements.txt
-      # python -m pip install --upgrade pip
+      run: python3 -m pip install -r requirements.txt
 
     - name: Black formatter check
-      run: black --line-length 120 --check --verbose app
+      run: python3 -m black --line-length 120 --check --verbose app
 
     - name: Run Pytest
       run: python3 -m pytest --cov app
