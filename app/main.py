@@ -7,7 +7,7 @@ import sys
 import argparse
 from termcolor import cprint
 
-from headerrc import HeaderRC
+from headerrc import HeaderRC, File_Mode
 
 
 class HeaderPy:
@@ -17,7 +17,10 @@ class HeaderPy:
         self.header_rc = HeaderRC(verbose=self.verbose)
 
     def run(self) -> None:
-        self._loop_through_files(self.header_rc.ignores)
+        if self.header_rc.file_mode == File_Mode.OPT_OUT:
+            self._loop_through_files_opt_out(self.header_rc.ignores)
+        if self.header_rc.file_mode == File_Mode.OPT_IN:
+            self._loop_through_files_opt_in(self.header_rc.accepts)
 
     def _add_header_to_file(
         self,
@@ -65,7 +68,37 @@ class HeaderPy:
             file.write(modified_content)  # Write the modified content
             file.truncate()  # Truncate in case the new content is shorter
 
-    def _loop_through_files(self, re_ignore_patterns: List[Pattern]) -> None:
+    def _loop_through_files_opt_in(self, re_accept_patterns: List[Pattern]) -> None:
+        base_dir = self.header_rc.work_path
+
+        for root, _, files in os.walk(base_dir, topdown=True):
+            for file in files:
+                # Create the full path and relative path for each file
+                full_file_path = Path(root) / file
+                rel_file_path = full_file_path.relative_to(base_dir)
+
+                # Check if the relative path of the file matches any of the accept patterns
+                # Skip the file if it does not match
+                if not any(pattern.search(str(rel_file_path)) for pattern in re_accept_patterns):
+                    if self.verbose and not str(rel_file_path).startswith(".git"):
+                        cprint(f"Skip - {rel_file_path}", "yellow")
+                    continue
+
+                if not full_file_path.is_file():
+                    if self.verbose:
+                        cprint(f"Skip (not a file) - {rel_file_path}", "yellow")
+                    continue
+
+                header = self.header_rc.get_header_for_file(file)
+                skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
+
+                if self.dry_run:
+                    print("Would Process -", rel_file_path)
+                else:
+                    print("Processing -", rel_file_path)
+                    self._add_header_to_file(full_file_path, header, skip_prefixes)
+
+    def _loop_through_files_opt_out(self, re_ignore_patterns: List[Pattern]) -> None:
         base_dir = self.header_rc.work_path
 
         for root, _, files in os.walk(base_dir, topdown=True):

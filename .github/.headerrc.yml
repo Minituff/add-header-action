@@ -1,12 +1,12 @@
 name: This file is used to set configuration for the add-header action
 
-# Automatically add everything in the .gitignore file into the untracked_files section
-# This can save lots of time because most of these files can be ingored.
-untrack_gitignore: false
+# Decide the method for choosing which files to add headers to
+# opt-out  =  all files will be selected unless the file path matches untracked_files
+# opt-in   =  no  files will be selected unless the file path matches anything in tracked_files
+file_mode: opt-out
 
 tracked_files:
-  - README.md
-  - ./**/*.py
+  - ^README.md$
 
 # Remove items from the default values by using a !. Like "!^.git/"
 untracked_files:
@@ -21,6 +21,9 @@ untracked_files:
   - app/
   - ^Dockerfile$
 
+# Automatically add everything in the .gitignore file into the untracked_files section
+# This can save lots of time because most of these files can be ingored.
+untrack_gitignore: false
 
 header: |
   SUPER SECRET CONFIDENTIAL

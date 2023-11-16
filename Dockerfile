@@ -1,7 +1,8 @@
 FROM python:3.12-alpine
 
-LABEL maintainer="minituff (James Tufarelli)"
+LABEL maintainer="Minituff (James Tufarelli)"
 
+# Copy all these files into /action/workspace
 COPY requirements.txt headerrc-default.yml app/*.py /action/workspace/
 
 # Install dependencies

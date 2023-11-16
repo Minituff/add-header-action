@@ -5,10 +5,14 @@ import os
 from re import Pattern
 from pathlib import Path
 from termcolor import cprint
+from enum import Enum
 
 # Set this enviornment variable and all the paths will be local (ie. not in a container)
 TEST_MODE = os.getenv("TEST_MODE", False)
 
+class File_Mode(Enum):
+    OPT_OUT = 1 # Default
+    OPT_IN = 2
 
 class HeaderRC:
     def __init__(self, verbose=False) -> None:
@@ -16,7 +20,7 @@ class HeaderRC:
         self.home_path = Path("/action/workspace/")
         self.work_path = Path("/github/workspace")
         if TEST_MODE == "true" or TEST_MODE == True:
-            cprint("--- Running in TEST mode ---", "red")
+            cprint("--- Running in TEST mode ---", "yellow")
             self.work_path = Path()
             self.home_path = Path()
 
@@ -36,10 +40,19 @@ class HeaderRC:
         self._skip_lines_that_have_raw = self._get_skip_lines_that_have_raw()
         
         self.header = self._get_header()
+        
+        # TODO: Allow overrides
+        self.file_mode: File_Mode = self._get_file_mode()
 
         self.ignores: list[Pattern] = []
         self.ignores_str: list[str] = []
-        self._load_ignores()
+        if self.file_mode == File_Mode.OPT_OUT:
+            self._load_ignores()
+        
+        self.accepts: list[Pattern] = []
+        self.accepts_str: list[str] = []
+        if self.file_mode == File_Mode.OPT_IN:
+            self._load_accepts()
         
         if self.verbose:
             cprint("Begin header", "magenta")
@@ -50,19 +63,20 @@ class HeaderRC:
             cprint(str(self._file_associations), "green")
             print("")
             
-            cprint("Untracked files", "magenta")
-            cprint(str(self.ignores_str), "green")
-            print("")
-            
-            # cprint("Tracked files", "magenta")
-            # cprint(str(self.ignores_str), "green")
-            # print("")
+            if self.file_mode == File_Mode.OPT_OUT:
+                cprint("File-mode = opt-out\n", "magenta")
+                cprint("Untracked files", "magenta")
+                cprint(str(self.ignores_str), "green")
+                print("")
+                
+            if self.file_mode == File_Mode.OPT_IN:
+                cprint("File-mode = opt-in\n", "magenta")
+                cprint("Tracked files", "magenta")
+                cprint(str(self.accepts_str), "green")
+                print("")
             
             cprint("Skip lines that have", "magenta")
             cprint(str(self._skip_lines_that_have_raw), "green")
-            
-            
-            
 
     def _load_default_yml(self):
         p = Path(self.home_path / "headerrc-default.yml")
@@ -126,8 +140,16 @@ class HeaderRC:
         return patterns
 
     def _load_ignores(self) -> list[Pattern]:
-        ignores1 = set(list(self.default_yml.get("untracked_files", [])))
-        ignores2 = set(list(self.user_yml.get("untracked_files", [])))
+        ignores1 = self.default_yml.get("untracked_files", [])
+        if ignores1 is None:
+            ignores1 = []
+        ignores1 = set(list(ignores1))
+        
+        ignores2 = self.user_yml.get("untracked_files", [])
+        if ignores2 is None:
+            ignores2 = []
+        ignores2 = set(list(ignores2))
+
         ignores1.update(ignores2)
         ignores = list(ignores1)
 
@@ -150,6 +172,39 @@ class HeaderRC:
         gitignore = self._handle_untrack_gitignore()
         self.ignores += gitignore
         return self.ignores
+    
+    def _load_accepts(self) -> list[Pattern]:
+        accepts1 = self.default_yml.get("tracked_files", [])
+        if accepts1 is None:
+            accepts1 = []
+        accepts1 = set(list(accepts1))
+        
+        accepts2 = self.user_yml.get("tracked_files", [])
+        if accepts2 is None:
+            accepts2 = []
+        accepts2 = set(list(accepts2))
+        
+        
+        accepts1.update(accepts2)
+        accepts = list(accepts1)
+
+        accepts_to_remove = []
+        accepts_filtered = []
+        for ac in accepts:
+            if ac.startswith("!") and ac[1:] in accepts:
+                accepts_to_remove.append(ac[1:])
+                continue
+            accepts_filtered.append(ac)
+
+        for ac in accepts_to_remove:
+            accepts_filtered.remove(ac)
+
+        for pattern in accepts_filtered:
+            p = re.compile(rf"{pattern}")
+            self.accepts.append(p)
+            self.accepts_str.append(pattern)
+
+        return self.accepts
 
     def _flatten_file_associations(self, yml_tag_name: str) -> dict:
         """Flatten file associations for faster processing"""
@@ -274,6 +329,27 @@ class HeaderRC:
         d1.update(d2)  # Merge the dictionaries
         return d1
 
+    def _get_file_mode(self) -> File_Mode:
+        f1 = str(self.default_yml.get("file_mode", ""))
+        f2 = str(self.user_yml.get("file_mode", ""))
+
+        if not f2:
+            if f1 == "opt-out":
+                return File_Mode.OPT_OUT
+            elif f1 == "opt-in":
+                return File_Mode.OPT_IN
+            else:
+                cprint(f"ERROR: {f1} is not a valid file_mode. Options are [opt-out, opt-in]", "red")
+            
+        if f2 == "opt-out":
+            return File_Mode.OPT_OUT
+        elif f2 == "opt-in":
+            return File_Mode.OPT_IN
+        else:
+            cprint(f"ERROR: {f1} is not a valid file_mode. Options are [opt-out, opt-in]", "red")
+        
+        return File_Mode.OPT_OUT
+    
     def _get_header(self) -> str:
         h1 = str(self.default_yml.get("header", ""))
         h2 = str(self.user_yml.get("header", ""))

@@ -4,9 +4,11 @@
 
 name: This file is used to set configuration for the add-header action
 
-# Automatically add everything in the .gitignore file into the untracked_files section
-# This can save lots of time because most of these files can be ignored.
-untrack_gitignore: true
+# Decide the method for choosing which files to add headers to
+# opt-out  =  all files will be selected unless the file path matches untracked_files
+# opt-in   =  no  files will be selected unless the file path matches anything in tracked_files
+file_mode: opt-out
+
 
 tracked_files:
   - a-list-of-files-to-be-tracked.fake-extension
@@ -19,6 +21,11 @@ untracked_files:
   - \.json$ # Most json files cannot contain comments
 
 
+# Automatically add everything in the .gitignore file into the untracked_files section
+# This can save lots of time because most of these files can be ignored.
+untrack_gitignore: true
+
+# The header to be inserted in matching files
 header: |
   SUPER SECRET CONFIDENTIAL
 
