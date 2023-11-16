@@ -27,16 +27,16 @@ class TestAll:
         _load_default_yml.return_value = mock_yml
         _load_user_yml.return_value = mock_yml
 
-        h = HeaderRC()
+        h = HeaderRC(unit_test_mode=True)
         assert h.negate_characters == "++"
         
         mock_yml["negagate_characters"] = "!"
         _load_user_yml.return_value = mock_yml
-        h = HeaderRC()
+        h = HeaderRC(unit_test_mode=True)
         assert h.negate_characters == "!"
         
         del mock_yml["negagate_characters"]
         _load_user_yml.return_value = mock_yml
-        h = HeaderRC()
+        h = HeaderRC(unit_test_mode=True)
         assert h.negate_characters == "!"
         
