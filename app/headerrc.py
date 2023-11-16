@@ -309,6 +309,7 @@ class HeaderRC:
         return self._dict_to_regex(self._skip_lines_that_have_raw)
 
     def _get_file_associations_by_extension(self) -> dict:
+        # TODO: Same items are getting overwritten
         d1 = dict(self.default_yml.get("file_associations_by_extension", {}))
         d2 = dict(self.user_yml.get("file_associations_by_extension", {}))
 
@@ -316,6 +317,7 @@ class HeaderRC:
         return d1
 
     def _get_file_associations_by_comment(self) -> dict:
+        # TODO: Same items are getting overwritten
         d1 = dict(self.default_yml.get("file_associations_by_comment", {}))
         d2 = dict(self.user_yml.get("file_associations_by_comment", {}))
 
@@ -323,6 +325,7 @@ class HeaderRC:
         return d1
 
     def _get_skip_lines_that_have_raw(self) -> dict:
+        # TODO: Same items are getting overwritten
         d1 = dict(self.default_yml.get("skip_lines_that_have", {}))
         d2 = dict(self.user_yml.get("skip_lines_that_have", {}))
 

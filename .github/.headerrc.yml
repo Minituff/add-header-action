@@ -28,7 +28,7 @@ untrack_gitignore: false
 header: |
   SUPER SECRET CONFIDENTIAL
 
-  [2023] - [Infinity and Boyond] ACME CO
+  [2023] - [Infinity and Beyond] ACME CO
   All Rights Reserved.
   
   NOTICE: This is super secret info that
@@ -37,8 +37,11 @@ header: |
 
 # Group mulitple items by the comment value
 file_associations_by_comment:  #Format = Comment: List[Regex for file match]
-  "#": ["^.gitignore$", ".yml$", ".yaml$" , ".sh$", "^Dockerfile$"]
-  //: [".js$", ".ts$"]
+  "#": 
+    - "^.gitignore$"
+  "//": 
+    - ".js$"
+    - ".ts$"
 
 
 # The item extension and the assocated comment. Overrides file_associations_by_comment

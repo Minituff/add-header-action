@@ -38,16 +38,127 @@ header: |
 
 # Group multiple items by the comment value
 file_associations_by_comment:  #Format = Comment: List[Regex for file match]
-  "#": ["\\.gitignore$", "\\.yml$", "\\.yaml$" , "\\.sh$"]
-  //: ["\\.js$", "\\.ts$", "\\.json5$"]
+  "#": # Shell-like single-line comment
+    - "\\.*\\.ya?ml$"
+    - "\\.sh$"
+    - "\\.bash$"
+    - "\\.zsh$"
+    - "\\.yaml$"
+    - "\\.yml$"
+    - "\\.py$"
+    - "\\.r$"
+    - "\\.rb$"
+    - "\\.gemspec$"
+    - "\\.podspec$"
+    - "\\.sls$"
+    - "^Dockerfile$"
+    - "\\.tf$" # Terraform
+    - "\\.pl$" # Perl
+    - "\\.cgi$"
+    - "\\.awk$"
+    - "\\.sed$"
+
+  "//":  # C-like single-line comment
+    - "\\.c$"
+    - "\\.json5$"
+    - "\\.h$"
+    - "\\.cpp$"
+    - "\\.hpp$"
+    - "\\.cc$"
+    - "\\.hh$"
+    - "\\.cxx$"
+    - "\\.hxx$"
+    - "\\.cs$"
+    - "\\.java$"
+    - "\\.js$"
+    - "\\.jsx$"
+    - "\\.ts$"
+    - "\\.tsx$"
+    - "\\.m$"
+    - "\\.mm$"
+    - "\\.swift$"
+    - "\\.go$"
+    - "\\.rs$"
+    - "\\.dart$"
+    - "\\.php$"
+    - "\\.css$"
+    - "\\.scss$"
+    - "\\.sass$"      
+    - "\\.kt$" # Kotlin single-line comment
+    - "\\.kts$"
+    - "\\.ktm$"
+    
+  "%":  # LaTeX, Matlab comment
+    - "\\.tex$"
+    - "\\.sty$"
+    - "\\.cls$"
+    - "\\.m$"
+    - "\\.mlx$"
+
+  "REM":  # Batch files
+    - "\\.bat$"
+    - "\\.cmd$"
+
+  "/*":  # Kotlin multi-line comment
+    - "\\.kt$"
+    - "\\.kts$"
+    - "\\.ktm$"
+
+  "--":  # SQL, Lua, Haskell comment
+    - "\\.sql$"
+    - "\\.lua$"
+    - "\\.hs$"
+    - "\\.lhs$"
+    - "\\.tpl$"
+    - "\\.pks$"
+    - "\\.pkb$"
+    
+  ";":  # Ini, Clojure, Lisp-like comment
+    - "\\.ini$"
+    - "\\.conf$"
+    - "\\.cfg$"
+    - "\\.clj$"
+    - "\\.cljs$"
+    - "\\.lisp$"
+    - "\\.asl$"
+    - "\\.el$"
+
 
 
 # The item extension and the associated comment. Overrides file_associations_by_comment
 # Remember the escape charter for yml \
 file_associations_by_extension: # Format = Regex for file match: List[prefix, suffix]|str.
-  ".*\\.ya?ml$": "#"
-  ".md": ["<!--", "-->"]
+  "\\.md$": ["<!--", "-->"]  # Markdown
+  "\\.html$": ["<!--", "-->"]  # HTML
+  "\\.htm$": ["<!--", "-->"]  # HTML
+  "\\.xhtml$": ["<!--", "-->"]  # XHTML
+  "\\.xml$": ["<!--", "-->"]  # XML
+  "\\.svg$": ["<!--", "-->"]  # Scalable Vector Graphics
+  "\\.jsp$": ["<!--", "-->"]  # Java Server Pages
+  "\\.vue$": ["<!--", "-->"]  # Vue.js Single-File Components
+  "\\.svelte$": ["<!--", "-->"]  # Svelte Single-File Components
+  "\\.css$": ["/*", "*/"]  # Cascading Style Sheets
+  "\\.scss$": ["/*", "*/"]  # Sassy CSS
+  "\\.sass$": ["/*", "*/"]  # Syntactically Awesome Stylesheets
+  "\\.js$": ["/*", "*/"]  # JavaScript
+  "\\.jsx$": ["/*", "*/"]  # JavaScript XML
+  "\\.ts$": ["/*", "*/"]  # TypeScript
+  "\\.tsx$": ["/*", "*/"]  # TypeScript XML
+  "\\.c$": ["/*", "*/"]  # C
+  "\\.cpp$": ["/*", "*/"]  # C++
+  "\\.h$": ["/*", "*/"]  # C Header
+  "\\.hpp$": ["/*", "*/"]  # C++ Header
+  "\\.java$": ["/*", "*/"]  # Java
+  "\\.cs$": ["/*", "*/"]  # C#
+  "\\.go$": ["/*", "*/"]  # Go
+  "\\.kt$": ["/*", "*/"]  # Kotlin
+  "\\.swift$": ["/*", "*/"]  # Swift
+  "\\.php$": ["/*", "*/"]  # PHP
+  "\\.rs$": ["/*", "*/"]  # Rust
+  "\\.m$": ["/*", "*/"]  # Objective-C
+  "\\.mm$": ["/*", "*/"]  # Objective-C++
+
 
 # For files that have 'important' first lines, use this setting to move the header below that line
 skip_lines_that_have: # Format = Regex for file match: List|str 
-  ".sh$": ["^#!"]
+  "\\.sh$": ["^#!"]
