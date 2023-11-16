@@ -89,13 +89,13 @@ class HeaderPy:
                         cprint(f"Skip (not a file) - {rel_file_path}", "yellow")
                     continue
 
-                header = self.header_rc.get_header_for_file(file)
+                header, prefix, suffix = self.header_rc.get_header_for_file(file)
                 skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
 
                 if self.dry_run:
-                    print("Would Process -", rel_file_path)
+                    print("Would Process -", rel_file_path, f" - {prefix} {suffix}")
                 else:
-                    print("Processing -", rel_file_path)
+                    print("Processing -", rel_file_path, f"- {prefix} {suffix}")
                     self._add_header_to_file(full_file_path, header, skip_prefixes)
 
     def _loop_through_files_opt_out(self, re_ignore_patterns: List[Pattern]) -> None:
@@ -131,13 +131,13 @@ class HeaderPy:
                 relative_file_path = Path(file_path)
 
 
-                header = self.header_rc.get_header_for_file(file)
+                header, prefix, suffix = self.header_rc.get_header_for_file(file)
                 skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
 
                 if self.dry_run:
-                    print("Would Process -", relative_file_path)
+                    print("Would Process -", relative_file_path, f" - {prefix} {suffix}")
                 else:
-                    print("Processing -", relative_file_path)
+                    print("Processing -", relative_file_path, f"- {prefix} {suffix}")
                     self._add_header_to_file(full_file_path, header, skip_prefixes)
 
 

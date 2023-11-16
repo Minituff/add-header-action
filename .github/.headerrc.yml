@@ -28,7 +28,7 @@ untrack_gitignore: false
 
 negagate_characters: "!"
 
-use_default_file_settings: false
+use_default_file_settings: true
 
 header: |
   SUPER SECRET CONFIDENTIAL

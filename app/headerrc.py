@@ -242,7 +242,8 @@ class HeaderRC:
             print(f"Unknown yml_tag_name '{yml_tag_name}'")
         return self._file_associations
 
-    def get_header_for_file(self, file_path: str) -> str:
+    def get_header_for_file(self, file_path: str) -> tuple[str, str, str]:
+        '''Reuturns the (header, prefix, suffix) for the file path'''
         prefix = ""
         suffix = ""
         for pattern, val in self.file_associations_regex.items():
@@ -266,14 +267,14 @@ class HeaderRC:
 
                 break
         else:
-            return ""
+            return "", "", ""
 
         new_header = ""
         for line in self.header.splitlines(keepends=False):
             if line.strip() != "":
                 new_header += f"{prefix} {line} {suffix}\n"
 
-        return new_header
+        return new_header, prefix, suffix
 
     def _dict_to_regex(self, dict_input: dict) -> dict[Pattern, str]:
         new_dict: dict[Pattern, str] = {}
