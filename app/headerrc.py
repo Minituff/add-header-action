@@ -17,7 +17,7 @@ class File_Mode(Enum):
 class HeaderRC:
     def __init__(self, verbose=False) -> None:
         self.verbose = verbose
-        self.home_path = Path("/action/workspace/")
+        self.home_path = Path("/app/")
         self.work_path = Path("/github/workspace")
         if TEST_MODE == "true" or TEST_MODE == True:
             cprint("--- Running in TEST mode ---", "yellow")
