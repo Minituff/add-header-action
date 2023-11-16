@@ -2,6 +2,52 @@
 # Add header-action
 Add a header to any file within you repo.
 
+## Header examples
+<details open><summary>------ Expand Me ------</summary>
+
+This action can support any `UTF-8` file type.
+
+**Bash**
+```bash
+#!/usr/bin/env bash
+
+# SUPER SECRET CONFIDENTIAL 
+# [2023] - [Infinity and Beyond] ACME Inc 
+# All Rights Reserved. 
+
+hello-world() {
+    echo "Hello world"
+}
+```
+**Javascript**
+```js
+// SUPER SECRET CONFIDENTIAL 
+// [2023] - [Infinity and Beyond] ACME Inc 
+// All Rights Reserved. 
+
+function helloWorld() {
+    console.log("Hello world")
+}
+```
+
+**HTML**
+```html
+<!DOCTYPE html>
+
+<!-- SUPER SECRET CONFIDENTIAL  -->
+<!-- [2023] - [Infinity and Beyond] ACME Inc  -->
+<!-- All Rights Reserved.  -->
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="style.css" type="text/css">
+</head>
+```
+
+And many more.
+</details>
+
 ## Usage
 This action is ready to go out of the box. To change the header, see the [Customization](#customization) section.
 
