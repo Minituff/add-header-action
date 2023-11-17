@@ -6,7 +6,7 @@
 
 
 # Add header-action
-Add a header to any file within you repo.
+Add a header to any file within your repo.
 
 ## Header examples
 <details open><summary>------ Expand Me ------</summary>
