@@ -124,12 +124,10 @@ class HeaderRC:
             exit(1)
 
         if p1.exists():
-            print(f"Found {p1}")
             with open(p1, "r") as file:
                 user_yml = yaml.safe_load(file)
 
         if p2.exists():
-            print(f"Found {p2}")
             with open(p2, "r") as file:
                 user_yml = yaml.safe_load(file)
 
@@ -251,7 +249,7 @@ class HeaderRC:
             print(f"Unknown yml_tag_name '{yml_tag_name}'")
         return self._file_associations
 
-    def get_header_for_file(self, file_path: str) -> tuple[str, str, str]:
+    def get_header_for_file(self, file_path: str) -> tuple[str, str, str, bool]:
         """Reuturns the (header, prefix, suffix) for the file path"""
         prefix = ""
         suffix = ""
@@ -276,14 +274,16 @@ class HeaderRC:
 
                 break
         else:
-            return "", "", ""
+            if self.verbose:
+                cprint(f"No file assocation - {file_path}", "red")
+            return "", "", "", False
 
         new_header = ""
         for line in self.header.splitlines(keepends=False):
             if line.strip() != "":
                 new_header += f"{prefix} {line} {suffix}\n"
 
-        return new_header, prefix, suffix
+        return new_header, prefix, suffix, True
 
     def _dict_to_regex(self, dict_input: dict) -> dict[Pattern, str]:
         new_dict: dict[Pattern, str] = {}

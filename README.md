@@ -1,3 +1,9 @@
+<!-- SUPER SECRET CONFIDENTIAL -->
+<!-- [2023] - [Infinity and Beyond] ACME CO -->
+<!-- All Rights Reserved. -->
+<!-- NOTICE: This is super secret info that -->
+<!-- must be protected at all costs. -->
+
 
 # Add header-action
 Add a header to any file within you repo.
@@ -131,7 +137,7 @@ file_associations_by_comment:
 # Remember the escape charter for yml is "\"
 # Here, you can only negate items by their key
 file_associations_by_extension:
-  ".*\\.ya?ml$": "#"
+  ".*\.ya?ml$": "#"
   "!.md": ["<!--", "-->"] # <--- Negate default items like this
 
 # For files that have 'important' first lines (like bash), use this setting to move the header below that line.

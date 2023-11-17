@@ -100,10 +100,11 @@ class HeaderPy:
                         cprint(f"Skip (not a file) - {rel_file_path}", "yellow")
                     continue
 
-                header, prefix, suffix = self.header_rc.get_header_for_file(file)
-                skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
+                header, prefix, suffix, succes = self.header_rc.get_header_for_file(file)
+                if succes:
+                    skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
 
-                self._add_header_to_file(full_file_path, rel_file_path, header, skip_prefixes, (prefix, suffix))
+                    self._add_header_to_file(full_file_path, rel_file_path, header, skip_prefixes, (prefix, suffix))
 
     def _loop_through_files_opt_out(self, re_ignore_patterns: List[Pattern]) -> None:
         base_dir = self.header_rc.work_path
@@ -137,10 +138,11 @@ class HeaderPy:
 
                 relative_file_path = Path(file_path)
 
-                header, prefix, suffix = self.header_rc.get_header_for_file(file)
-                skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
+                header, prefix, suffix, success = self.header_rc.get_header_for_file(file)
+                if success:
+                    skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
 
-                self._add_header_to_file(full_file_path, relative_file_path, header, skip_prefixes, (prefix, suffix))
+                    self._add_header_to_file(full_file_path, relative_file_path, header, skip_prefixes, (prefix, suffix))
 
 
 def _get_bool(config: dict[str, Any], input_str: str, default=False) -> bool:
