@@ -15,6 +15,10 @@ class TestHeaderRCSettings:
         Runs 1 time before all tests in this class
         """
         pass
+    
+        # TODO: Test _load_default_yml
+        # TODO: Test _load_user_yml
+        # TODO: Test verbose mode
 
     def test_negate_ignores(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
         mock_yml = {"untracked_files": [r"^README.md$", r"test.txt"], "untrack_gitignore": False}
