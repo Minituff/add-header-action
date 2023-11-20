@@ -1,9 +1,9 @@
+import re
 import pytest
 import mock
 from mock import MagicMock, mock_open
 
 from app.headerrc import HeaderRC, File_Mode
-
 
 # All functions in this class have mocks
 @mock.patch.object(HeaderRC, "_load_default_yml")
@@ -15,10 +15,6 @@ class TestHeaderRCSettings:
         Runs 1 time before all tests in this class
         """
         pass
-    
-        # TODO: Test _load_default_yml
-        # TODO: Test _load_user_yml
-        # TODO: Test verbose mode
 
     def test_negate_ignores(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
         mock_yml = {"untracked_files": [r"^README.md$", r"test.txt"], "untrack_gitignore": False}
@@ -288,15 +284,15 @@ class TestHeaderRCSettings:
         mock_yml = {
             "untracked_files": [r"^README.md$", r"test.txt"],
             "tracked_files": [r"^\.git/", r"^\.gitignore"],
-            "file_associations_by_comment":{"//": [".js$", ".ts$"]},
+            "file_associations_by_comment": {"//": [".js$", ".ts$"]},
             "file_associations_by_extension": {".md": ["<!--", "-->"]},
-            "skip_lines_that_have":  {".sh$": ["#&"]},
+            "skip_lines_that_have": {".sh$": ["#&"]},
         }
         mock_yml_user = {"use_default_file_settings": True, "untrack_gitignore": False, "file_mode": "opt-out"}
 
         _load_default_yml.return_value = mock_yml
         _load_user_yml.return_value = mock_yml_user
-        
+
         h = HeaderRC(unit_test_mode=True)
         assert set(h.ignores_str) == set([r"^README.md$", r"test.txt"])
         assert h.file_associations == {
@@ -305,20 +301,96 @@ class TestHeaderRCSettings:
             ".md": ["<!--", "-->"],
         }
         assert h._skip_lines_that_have_raw == {".sh$": ["#&"]}
-        
+
         mock_yml_user["file_mode"] = "opt-in"
-        
+
         h = HeaderRC(unit_test_mode=True)
         assert set(h.accepts_str) == set([r"^\.git/", r"^\.gitignore"])
-        
-        
+
         mock_yml_user["use_default_file_settings"] = False
         h = HeaderRC(unit_test_mode=True)
         assert set(h.accepts_str) == set()
         assert h.file_associations == {}
         assert h._skip_lines_that_have_raw == {}
-        
+
         mock_yml_user["file_mode"] = "opt-out"
         h = HeaderRC(unit_test_mode=True)
         assert set(h.ignores_str) == set()
+
+    @mock.patch("builtins.print")
+    def test_verbose(self, _mockcprint: MagicMock, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
+        _mockcprint.return_value = None
+        h = HeaderRC(unit_test_mode=True, verbose=True)
+        assert True
+
+    def test_dict_to_regex(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
+        mock_yml = {
+            "file_associations_by_comment": {
+                "#": ["^.gitignore$"],
+            },
+            "file_associations_by_extension": {
+                ".md": ["<!--", "-->"],
+            },
+        }
+        mock_yml_user = {"untrack_gitignore": False}
+
+        _load_default_yml.return_value = mock_yml
+        _load_user_yml.return_value = mock_yml_user
+
+        h = HeaderRC(unit_test_mode=True)
+        val = {
+            re.compile("^.gitignore$"): "#",
+            re.compile(".md"): ["<!--", "-->"],
+        }
+        assert h.file_associations_regex == val
+
+    def test_get_header(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
+        mock_yml = {"header": "Starter header"}
+        mock_yml_user = {"header": "NOT header"}
+
+        _load_default_yml.return_value = mock_yml
+        _load_user_yml.return_value = mock_yml_user
+
+        h = HeaderRC(unit_test_mode=True)
+        assert h.header == "NOT header"
+
+    def test_get_header_for_file(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
+        mock_yml = {
+            "header": "Starter header",
+            "file_associations_by_comment": {
+                "//": [".js$", ".ts$"],
+            },
+        }
+        mock_yml_user = {"header": "NOT header"}
+
+        _load_default_yml.return_value = mock_yml
+        _load_user_yml.return_value = mock_yml_user
+
+        h = HeaderRC(unit_test_mode=True)
+        assert h.get_header_for_file("test.ts") == ('// NOT header \n', '//', '', True)
+
+    def test_get_skip_lines_that_start_for_file(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
+        mock_yml = {
+            "file_associations_by_comment": {
+                "#": [".sh$"],
+            },
+            "skip_lines_that_have": {"\\.sh$": ["^#!"]}
+        }
+        mock_yml_user = {}
+
+        _load_default_yml.return_value = mock_yml
+        _load_user_yml.return_value = mock_yml_user
         
+        h = HeaderRC(unit_test_mode=True)
+        assert h.get_skip_lines_that_start_for_file("test.sh") == [re.compile('^#!')]
+
+class TestHeaderRCLoadYML:
+    @classmethod
+    def setup_class(cls):
+        """
+        Runs 1 time before all tests in this class
+        """
+        pass
+
+    def test_load_yml(self):
+        h = HeaderRC(unit_test_mode=True)
