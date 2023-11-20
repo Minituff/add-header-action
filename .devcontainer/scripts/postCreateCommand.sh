@@ -27,6 +27,9 @@ echo "alias build=\"home && docker build -t add-header-action --no-cache .\"" >>
 # Run the script locally
 echo "alias run=\"home && python3 app/main.py\"" >> ~/.zshrc
 
+# Format all python files in /app and /test
+echo "alias format=\"python3 -m black --line-length 120 app test\"" >> ~/.zshrc
+
 # Run pytest and output report as hmtl
 echo "alias test=\"home && clear && python3 -m pytest -vs --cov app --cov-report html --cov-report term\"" >> ~/.zshrc
 

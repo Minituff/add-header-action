@@ -5,6 +5,7 @@ from mock import MagicMock, mock_open
 
 from app.headerrc import HeaderRC, File_Mode
 
+
 # All functions in this class have mocks
 @mock.patch.object(HeaderRC, "_load_default_yml")
 @mock.patch.object(HeaderRC, "_load_user_yml")
@@ -317,7 +318,7 @@ class TestHeaderRCSettings:
         h = HeaderRC(unit_test_mode=True)
         assert set(h.ignores_str) == set()
 
-    @mock.patch("builtins.print", return_value = None)
+    @mock.patch("builtins.print", return_value=None)
     def test_verbose(self, _mockcprint: MagicMock, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
         h = HeaderRC(unit_test_mode=True, verbose=True)
         assert True
@@ -366,22 +367,23 @@ class TestHeaderRCSettings:
         _load_user_yml.return_value = mock_yml_user
 
         h = HeaderRC(unit_test_mode=True)
-        assert h.get_header_for_file("test.ts") == ('// NOT header \n', '//', '', True)
+        assert h.get_header_for_file("test.ts") == ("// NOT header \n", "//", "", True)
 
     def test_get_skip_lines_that_start_for_file(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
         mock_yml = {
             "file_associations_by_comment": {
                 "#": [".sh$"],
             },
-            "skip_lines_that_have": {"\\.sh$": ["^#!"]}
+            "skip_lines_that_have": {"\\.sh$": ["^#!"]},
         }
         mock_yml_user = {}
 
         _load_default_yml.return_value = mock_yml
         _load_user_yml.return_value = mock_yml_user
-        
+
         h = HeaderRC(unit_test_mode=True)
-        assert h.get_skip_lines_that_start_for_file("test.sh") == [re.compile('^#!')]
+        assert h.get_skip_lines_that_start_for_file("test.sh") == [re.compile("^#!")]
+
 
 class TestHeaderRCLoadYML:
     @classmethod

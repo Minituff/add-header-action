@@ -97,7 +97,7 @@ class HeaderRC:
         cprint("Skip lines that have:", "magenta")
         cprint(str(self._skip_lines_that_have_raw), "green")
         # :nocov:
-        
+
     def _load_default_yml(self):
         p = Path(self.home_path / "headerrc-default.yml")
 

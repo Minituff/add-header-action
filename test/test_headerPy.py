@@ -31,7 +31,7 @@ class TestHeaderRCSettings:
     @mock.patch.object(Path, "is_file")
     @mock.patch("os.walk")
     @mock.patch.object(HeaderPy, "_add_header_to_file")
-    @mock.patch("builtins.print", return_value = None)
+    @mock.patch("builtins.print", return_value=None)
     def test_loop_through_files_opt_out(
         self,
         mock_print: MagicMock,
@@ -72,7 +72,7 @@ class TestHeaderRCSettings:
     @mock.patch.object(Path, "relative_to")
     @mock.patch("os.walk")
     @mock.patch.object(HeaderPy, "_add_header_to_file")
-    @mock.patch("builtins.print", return_value = None)
+    @mock.patch("builtins.print", return_value=None)
     def test_loop_through_files_opt_in(
         self,
         mock_print: MagicMock,
@@ -104,21 +104,17 @@ class TestHeaderRCSettings:
             call(PosixPath("/foo/bar/eggs.js"), "good/path", "// Header \n", None, ("//", "")),
         ]
 
-    @mock.patch("builtins.print", return_value = None)
+    @mock.patch("builtins.print", return_value=None)
     def test_add_header_to_file(self, mock_print: MagicMock, tmp_path: Path):
-        tmp_path = tmp_path / 'tmp-file.txt'
+        tmp_path = tmp_path / "tmp-file.txt"
         with tmp_path.open("a", encoding="utf-8") as f:
             f.write("Some basic stuff")
-        
+
         h = HeaderPy(dry_run=False, verbose=True)
         h._add_header_to_file(
-            file_path=tmp_path,
-            relative_file_path=tmp_path,
-            header="# HEADER",
-            prefix_suffix=("#", "")
+            file_path=tmp_path, relative_file_path=tmp_path, header="# HEADER", prefix_suffix=("#", "")
         )
 
         with tmp_path.open("r+", encoding="utf-8") as file:
             contents = file.read()
             assert contents == "# HEADER\n\nSome basic stuff"
-            
