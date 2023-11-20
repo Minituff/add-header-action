@@ -87,7 +87,7 @@ class HeaderPy:
                 # Create the full path and relative path for each file
                 full_file_path = Path(root) / file
                 rel_file_path = full_file_path.relative_to(base_dir)
-
+            
                 # Check if the relative path of the file matches any of the accept patterns
                 # Skip the file if it does not match
                 if not any(pattern.search(str(rel_file_path)) for pattern in re_accept_patterns):
@@ -99,7 +99,7 @@ class HeaderPy:
                     if self.verbose:
                         cprint(f"Skip (not a file) - {rel_file_path}", "yellow")
                     continue
-
+                
                 header, prefix, suffix, succes = self.header_rc.get_header_for_file(file)
                 if succes:
                     skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)

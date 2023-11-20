@@ -317,9 +317,8 @@ class TestHeaderRCSettings:
         h = HeaderRC(unit_test_mode=True)
         assert set(h.ignores_str) == set()
 
-    @mock.patch("builtins.print")
+    @mock.patch("builtins.print", return_value = None)
     def test_verbose(self, _mockcprint: MagicMock, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
-        _mockcprint.return_value = None
         h = HeaderRC(unit_test_mode=True, verbose=True)
         assert True
 
