@@ -119,11 +119,10 @@ class HeaderPy:
                 if self.verbose and not file_path.startswith(".git"):
                     cprint(f"Skip - {file_path}", "yellow")
                 continue
-
+            
             for file in files:
                 file_path = os.path.join(root, file)
                 file_path = os.path.relpath(file_path, base_dir)
-
                 # Check if the current FILE matches any of the ignore patterns
                 if any(pattern.search(file_path) for pattern in re_ignore_patterns):
                     if self.verbose and not file_path.startswith(".git"):
@@ -141,7 +140,6 @@ class HeaderPy:
                 header, prefix, suffix, success = self.header_rc.get_header_for_file(file)
                 if success:
                     skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
-
                     self._add_header_to_file(full_file_path, relative_file_path, header, skip_prefixes, (prefix, suffix))
 
 
