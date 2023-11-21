@@ -10,7 +10,7 @@
 		"ghcr.io/devcontainers/features/docker-outside-of-docker:1": {}
 	},
 	"containerEnv": {
-		"TEST_MODE": "true",
+		"DEV_MODE": "true",
 		"PYTHONPATH": "."
 	},
 	"customizations": {

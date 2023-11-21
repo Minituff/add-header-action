@@ -8,7 +8,7 @@ from termcolor import cprint
 from enum import Enum
 
 # Set this enviornment variable and all the paths will be local (ie. not in a container)
-TEST_MODE = os.getenv("TEST_MODE", False)
+DEV_MODE = os.getenv("DEV_MODE", "false")
 
 
 class File_Mode(Enum):
@@ -17,13 +17,13 @@ class File_Mode(Enum):
 
 
 class HeaderRC:
-    def __init__(self, verbose=False, unit_test_mode=False, test_mode=False, use_default_paths=True) -> None:
+    def __init__(self, verbose=False, unit_test_mode=False, use_default_paths=True) -> None:
         self.verbose = verbose
         self.home_path = Path("/app/")
         self.work_path = Path("/github/workspace")
-        if TEST_MODE == "true" or TEST_MODE == True or test_mode == True:
+        if str(DEV_MODE).lower() == "true" or unit_test_mode == True:
             if unit_test_mode is False:
-                cprint("--- Running in TEST mode ---", "yellow")
+                cprint("--- Running in DEV_MODE mode ---", "yellow")
             if use_default_paths is True:
                 self.work_path = Path()
                 self.home_path = Path()

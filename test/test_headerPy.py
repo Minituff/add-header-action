@@ -46,7 +46,7 @@ class TestHeaderRCSettings:
         mockwalk.return_value = mw
         mock_is_file.return_value = True
 
-        h = HeaderPy(dry_run=True, verbose=True)
+        h = HeaderPy(dry_run=True, verbose=True, unit_test_mode=True)
         h.header_rc.header = "Header"
         h.header_rc._file_associations = {".js": "//", ".sh": "#", ".txt": "", "\\.md$": ["<!--", "-->"]}
 
@@ -89,7 +89,7 @@ class TestHeaderRCSettings:
         mock_is_file.return_value = True
         mock_relative_to.return_value = "good/path"
 
-        h = HeaderPy(dry_run=True, verbose=True)
+        h = HeaderPy(dry_run=True, verbose=True, unit_test_mode=True)
         h.header_rc.header = "Header"
         h.header_rc.file_mode = File_Mode.OPT_OUT
         h.header_rc._file_associations = {".js": "//", ".sh": "#", ".txt": "", "\\.md$": ["<!--", "-->"]}
@@ -110,7 +110,7 @@ class TestHeaderRCSettings:
         with tmp_path.open("a", encoding="utf-8") as f:
             f.write("Some basic stuff")
 
-        h = HeaderPy(dry_run=False, verbose=True)
+        h = HeaderPy(dry_run=False, verbose=True, unit_test_mode=True)
         h._add_header_to_file(
             file_path=tmp_path, relative_file_path=tmp_path, header="# HEADER", prefix_suffix=("#", "")
         )

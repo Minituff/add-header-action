@@ -11,10 +11,10 @@ from app.headerrc import HeaderRC, File_Mode
 
 
 class HeaderPy:
-    def __init__(self, dry_run=False, verbose=False) -> None:
+    def __init__(self, dry_run=False, verbose=False, unit_test_mode=False) -> None:
         self.dry_run = dry_run
         self.verbose = verbose
-        self.header_rc = HeaderRC(verbose=self.verbose)
+        self.header_rc = HeaderRC(verbose=self.verbose, unit_test_mode=unit_test_mode)
 
     def run(self) -> None:
         if self.header_rc.file_mode == File_Mode.OPT_OUT:
