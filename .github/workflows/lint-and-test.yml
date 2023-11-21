@@ -21,10 +21,11 @@ jobs:
     - name: Install dependencies
       run: python3 -m pip install -r requirements.txt
 
-    # - name: Black formatter check
-    #   run: python3 -m black --line-length 120 --check --verbose app
+    - name: Black formatter check
+      run: python3 -m black --line-length 120 --check --verbose app
     
     - name: Run Pytest
       run: |
+        TESTMODE=true
         PYTHONPATH=.
         python3 -m pytest -r . --cov app --cov-report html --cov-report term --cov-report xml
