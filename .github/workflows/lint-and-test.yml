@@ -26,3 +26,11 @@ jobs:
     
     - name: Run Pytest
       run: python3 -m pytest --cov app --cov-report html --cov-report term --cov-report xml
+    
+    - name: Upload reports to Codecov
+      uses: codecov/codecov-action@v4-beta
+      env: 
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }} # Required for v4
+      with:
+        fail_ci_if_error: true
+        files: coverage.xml
