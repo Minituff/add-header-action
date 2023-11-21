@@ -27,6 +27,7 @@ class TestHeaderRCSettings:
         input_val = {"NO": "false", "something": ""}
         assert _get_bool(input_val, "test", default=True) == True
         assert _get_bool({}, "test", default=False) == False
+        assert _get_bool({"test": "fake"}, "test", default=True) == True
 
     @mock.patch.object(Path, "is_file")
     @mock.patch("os.walk")
@@ -121,7 +122,59 @@ class TestHeaderRCSettings:
         with tmp_path.open("r+", encoding="utf-8") as file:
             contents = file.read()
             assert contents == "# HEADER\n\nSome basic stuff"
+            
+    @mock.patch("builtins.print", return_value=None)
+    def test_add_header_to_file_where_already_exists(self, mock_print: MagicMock, tmp_path: Path):
+        tmp_path = tmp_path / "tmp-file.txt"
+        with tmp_path.open("a", encoding="utf-8") as f:
+            f.write("# HEADER\n\nSome basic stuff")
 
-    # TODO: Test skip_prefixes
-    # TODO: Test verbose
-    # TODO: if self.verbose and not file_path.startswith(".git"): 
+        h = HeaderPy(dry_run=False, verbose=True, unit_test_mode=True)
+        h._add_header_to_file(
+            file_path=tmp_path, relative_file_path=tmp_path, header="# HEADER", prefix_suffix=("#", "")
+        )
+
+        with tmp_path.open("r+", encoding="utf-8") as file:
+            contents = file.read()
+            assert contents == "# HEADER\n\nSome basic stuff"
+
+    @mock.patch("builtins.print", return_value=None)
+    def test_skip_prefixes(self, mock_print: MagicMock, tmp_path: Path):
+        tmp_path = tmp_path / "tmp-file.sh"
+        with tmp_path.open("a", encoding="utf-8") as f:
+            f.write("#!/usr/bin/env bash\n")
+            f.write("Some basic stuff\n")
+
+        h = HeaderPy(dry_run=False, verbose=True, unit_test_mode=True)
+        h._add_header_to_file(
+            file_path=tmp_path, relative_file_path=tmp_path, header="# HEADER", prefix_suffix=("#", ""),
+            skip_prefixes=[re.compile("^#!")]
+        )
+
+        with tmp_path.open("r+", encoding="utf-8") as file:
+            contents = file.read()
+            assert contents == '#!/usr/bin/env bash\n\n# HEADER\n\nSome basic stuff\n'
+    
+    @mock.patch.object(HeaderPy, "_loop_through_files_opt_out")
+    @mock.patch.object(HeaderPy, "_loop_through_files_opt_in")
+    @mock.patch("builtins.print", return_value=None)
+    def test_run(
+        self,
+        mock_print: MagicMock,
+        mock_loop_through_files_opt_in: MagicMock,
+        mock_loop_through_files_opt_out: MagicMock,
+    ):
+
+        h = HeaderPy(dry_run=True, verbose=True, unit_test_mode=True)
+        h.header_rc.file_mode = File_Mode.OPT_OUT
+        h.run()
+        
+        mock_loop_through_files_opt_out.assert_called_once()
+        
+        h.header_rc.file_mode = File_Mode.OPT_IN
+        h.run()
+        mock_loop_through_files_opt_in.assert_called_once()
+
+
+    # TODO: if self.verbose and not file_path.startswith(".git"):
+    # TODO: Test arg parse
