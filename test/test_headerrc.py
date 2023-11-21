@@ -394,4 +394,4 @@ class TestHeaderRCLoadYML:
         pass
 
     def test_load_yml(self):
-        h = HeaderRC(unit_test_mode=True)
+        h = HeaderRC(unit_test_mode=True, use_default_paths=True)
