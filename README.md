@@ -75,7 +75,7 @@ jobs:
         token: ${{ secrets.PAT }} # (only needed for private repos)
     
     - name: Add header action step
-      uses: minituff/add-header-action@v1
+      uses: minituff/add-header-action@v0
       id: add-header-action
       with:
         dry-run: false # Don't make any changes, but log what *would* change.
