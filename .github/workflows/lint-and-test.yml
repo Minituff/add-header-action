@@ -25,4 +25,7 @@ jobs:
       run: python3 -m black --line-length 120 --check --verbose app
 
     - name: Run Pytest
-      run: python3 -m pytest -r /home/runner/work/add-header-action --cov app --cov-report html --cov-report term --cov-report xml
+      run: |
+        cd /home/runner/work/add-header-action
+        PYTHONPATH=.
+        python3 -m pytest -r . --cov app --cov-report html --cov-report term --cov-report xml
