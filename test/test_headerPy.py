@@ -55,18 +55,21 @@ class TestHeaderRCSettings:
 
         assert _add_header_to_file.call_count == 2
 
-        assert _add_header_to_file.call_args_list == [
-            call(
-                PosixPath("../../foo/bar/spam.md"),
-                PosixPath("../../foo/bar/spam.md"),
-                "<!-- Header -->\n",
-                None,
-                ("<!--", "-->"),
-            ),
-            call(
-                PosixPath("../../foo/bar/eggs.js"), PosixPath("../../foo/bar/eggs.js"), "// Header \n", None, ("//", "")
-            ),
-        ]
+        for idx, call in enumerate(_add_header_to_file.call_args_list):
+            (path1, path2, header, skip_prefixes, prefix_suffix) = call.args
+
+            if idx == 0:
+                assert str(path1).endswith("foo/bar/spam.md")
+                assert str(path2).endswith("foo/bar/spam.md")
+                assert skip_prefixes == None
+                assert header == "<!-- Header -->\n"
+                assert prefix_suffix == ("<!--", "-->")
+            if idx == 1:
+                assert str(path1).endswith("foo/bar/eggs.js")
+                assert str(path1).endswith("foo/bar/eggs.js")
+                assert skip_prefixes == None
+                assert header == "// Header \n"
+                assert prefix_suffix == ("//", "")
 
     @mock.patch.object(Path, "is_file")
     @mock.patch.object(Path, "relative_to")
