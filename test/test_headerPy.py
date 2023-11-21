@@ -121,3 +121,7 @@ class TestHeaderRCSettings:
         with tmp_path.open("r+", encoding="utf-8") as file:
             contents = file.read()
             assert contents == "# HEADER\n\nSome basic stuff"
+
+    # TODO: Test skip_prefixes
+    # TODO: Test verbose
+    # TODO: if self.verbose and not file_path.startswith(".git"): 
