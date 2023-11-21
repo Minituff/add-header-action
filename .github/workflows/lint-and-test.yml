@@ -27,5 +27,5 @@ jobs:
     - name: Run Pytest
       run: |
         cd /home/runner/work/add-header-action
-        PYTHONPATH=.
+        # PYTHONPATH=/home/runner/work/add-header-action
         python3 -m pytest -r . --cov app --cov-report html --cov-report term --cov-report xml
