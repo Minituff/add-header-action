@@ -26,4 +26,5 @@ jobs:
     
     - name: Run Pytest
       run: |
-        pytest --cov app --cov-report html --cov-report term --cov-report xml
+        PYTHONPATH=.
+        python3 -m pytest -r . --cov app --cov-report html --cov-report term --cov-report xml
