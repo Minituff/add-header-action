@@ -6,12 +6,6 @@ on:
     branches:
       - main
 
-env: 
-  # The "FORCE_COLOR" variable, when set to 1, tells Nox to colorize itself.
-  # This is only useful when debug-mode is True
-  FORCE_COLOR: "1"
-
-
 jobs:
   build:
     name: Add headers
@@ -22,8 +16,8 @@ jobs:
         token: ${{ secrets.PAT }}
     
     - name: Add header action step
-      uses: ./ # Uses an action in the root directory
-      # Normally would be 'minituff/add-header-action'
+      # uses: ./ # Uses an action in the root directory
+      uses: minituff/add-header-action@v0.0.1 # Change this to be the latest version, SHA, or branch name
       id: add-header-action
       with:
         dry-run: true
@@ -33,5 +27,7 @@ jobs:
       uses: stefanzweifel/git-auto-commit-action@v5
         # Token comes from actions/checkout
 
-
-
+env: 
+  # The "FORCE_COLOR" variable, when set to 1, tells Nox to colorize itself.
+  # This is only useful when debug-mode is True
+  FORCE_COLOR: "1"
