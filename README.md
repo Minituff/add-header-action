@@ -6,7 +6,11 @@
 
 
 # Add header-action
-Intelligently Add a header to any file within your repo.
+[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-active-undefined.svg?logo=github&logoColor=white&style=flat)](https://github.com/marketplace/actions/add-header)
+[![CI Status](https://github.com/Minituff/add-header-action/actions/workflows/lint-and-test.yml/badge.svg)](https://github.com/Minituff/add-header-action/actions/workflows/lint-and-test.yml)
+[![codecov](https://codecov.io/github/Minituff/add-header-action/graph/badge.svg?token=NGVZKMXTM2)](https://codecov.io/github/Minituff/add-header-action)
+
+Intelligently add a header to any file within your repo.
 
 ## Header examples
 <details open><summary>------ Expand Me ------</summary>
