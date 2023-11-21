@@ -1,6 +1,6 @@
 # action.yml
 name: 'Add-header'
-description: 'Add a header to any file within you repo.'
+description: 'Intelligently add a header to any file within you repo.'
 
 # https://docs.github.com/en/actions/creating-actions/metadata-syntax-for-github-actions#branding
 branding:

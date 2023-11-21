@@ -6,7 +6,7 @@
 
 
 # Add header-action
-Add a header to any file within your repo.
+Intelligently Add a header to any file within your repo.
 
 ## Header examples
 <details open><summary>------ Expand Me ------</summary>
@@ -68,7 +68,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
       with:
-        token: ${{ secrets.PAT }} # (optional)
+        token: ${{ secrets.PAT }} # (only needed for private repos)
     
     - name: Add header action step
       uses: minituff/add-header-action@v1
@@ -77,7 +77,7 @@ jobs:
         dry-run: false # Don't make any changes, but log what *would* change.
         verbose: false # Extra logging to help you debug.
 
-    - name: Commit changes back to repo
+    - name: Commit and Push changes back to repo
       uses: stefanzweifel/git-auto-commit-action@v5
 ```
 ## Customization
@@ -88,11 +88,11 @@ Create a `.headerrc.yml` file in either the `.github` **or** *root* diretory of 
  ┣ 📂.github
  ┃ ┣ 📂workflows
  ┃ ┃ ┗ 📜add-header-workflow.yml
- ┃ ┗ 📜.headerrc.yml
+ ┃ ┗ 📜.headerrc.yml             # <---- Either here
  ┗ 📜.gitignore
 
 📦root
- ┣ 📜.headerrc.yml
+ ┣ 📜.headerrc.yml               # <---- Or here
  ┗ 📜.gitignore
 ```
 
