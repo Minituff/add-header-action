@@ -100,6 +100,7 @@ class HeaderRC:
 
     def _load_default_yml(self):
         p = Path(self.home_path / "headerrc-default.yml")
+        print("headerrc-default.yml PATH = ", p.absolute())
 
         if not p.exists():
             print("ERROR: Could not find the default configuration file.")
