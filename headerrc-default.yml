@@ -11,7 +11,7 @@ file_mode: opt-out
 
 
 tracked_files:
-  - a-list-of-files-to-be-tracked.fake-extension
+  - a-list-of-files-to-be-tracked.default-item
 
 # Remove items from the default values by using a !. Like "!^.git/"
 untracked_files:

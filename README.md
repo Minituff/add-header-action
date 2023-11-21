@@ -74,14 +74,27 @@ jobs:
       uses: minituff/add-header-action@v1
       id: add-header-action
       with:
-        dry-run: true # Dont't make any changes, but log what *would* change.
+        dry-run: false # Don't make any changes, but log what *would* change.
         verbose: false # Extra logging to help you debug.
 
     - name: Commit changes back to repo
       uses: stefanzweifel/git-auto-commit-action@v5
 ```
 ## Customization
-Create a `.headerrc.yml` file in either the *.github* or *root* diretory of your project.
+Create a `.headerrc.yml` file in either the `.github` **or** *root* diretory of your project.
+
+```console
+📦root
+ ┣ 📂.github
+ ┃ ┣ 📂workflows
+ ┃ ┃ ┗ 📜add-header-workflow.yml
+ ┃ ┗ 📜.headerrc.yml
+ ┗ 📜.gitignore
+
+📦root
+ ┣ 📜.headerrc.yml
+ ┗ 📜.gitignore
+```
 
 This action loads default values  from the [headerrc-default.yml](/headerrc-default.yml) <small>(this is built into the action)</small>, then merges them with the values from the [.headerrc.yml](/.github/.headerrc.yml) file from your repo.
 
@@ -127,8 +140,8 @@ negate_characters: "!" # Default = "!"
 file_associations_by_comment:
   "#": 
     - "^.gitignore$"
-    - "!^.gitignore$" # <--- Negate default items like this
-    - ".gitignore$" # <-- You can also re-add any negated item
+    - "!^.gitignore$" # <-- Negate default items like this
+    - ".gitignore$" # <---- You can also re-add any negated items
   "//": 
     - ".js$"
     - ".ts$"

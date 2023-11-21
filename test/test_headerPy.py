@@ -197,6 +197,5 @@ class TestHeaderRCSettings:
         main(test_input)
 
         args, kwargs = mockHeaderPy.call_args_list[0]
-        print(kwargs)
         assert kwargs["dry_run"] == True
         assert kwargs["verbose"] == True
