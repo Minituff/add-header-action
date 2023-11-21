@@ -23,9 +23,8 @@ jobs:
 
     - name: Black formatter check
       run: python3 -m black --line-length 120 --check --verbose app
-
+    
     - name: Run Pytest
       run: |
-        cd /home/runner/work/add-header-action
-        # PYTHONPATH=/home/runner/work/add-header-action
-        python3 -m pytest -r . --cov app --cov-report html --cov-report term --cov-report xml
+        PYTHONPATH=.
+        python3 -m pytest --cov app --cov-report html --cov-report term --cov-report xml
