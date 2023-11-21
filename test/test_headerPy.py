@@ -5,7 +5,7 @@ import pytest
 import mock
 from mock import MagicMock, call, mock_open
 
-from app.main import HeaderPy, _get_bool
+from app.main import HeaderPy, _get_bool, main
 from app.headerrc import File_Mode
 
 
@@ -122,7 +122,7 @@ class TestHeaderRCSettings:
         with tmp_path.open("r+", encoding="utf-8") as file:
             contents = file.read()
             assert contents == "# HEADER\n\nSome basic stuff"
-            
+
     @mock.patch("builtins.print", return_value=None)
     def test_add_header_to_file_where_already_exists(self, mock_print: MagicMock, tmp_path: Path):
         tmp_path = tmp_path / "tmp-file.txt"
@@ -147,14 +147,17 @@ class TestHeaderRCSettings:
 
         h = HeaderPy(dry_run=False, verbose=True, unit_test_mode=True)
         h._add_header_to_file(
-            file_path=tmp_path, relative_file_path=tmp_path, header="# HEADER", prefix_suffix=("#", ""),
-            skip_prefixes=[re.compile("^#!")]
+            file_path=tmp_path,
+            relative_file_path=tmp_path,
+            header="# HEADER",
+            prefix_suffix=("#", ""),
+            skip_prefixes=[re.compile("^#!")],
         )
 
         with tmp_path.open("r+", encoding="utf-8") as file:
             contents = file.read()
-            assert contents == '#!/usr/bin/env bash\n\n# HEADER\n\nSome basic stuff\n'
-    
+            assert contents == "#!/usr/bin/env bash\n\n# HEADER\n\nSome basic stuff\n"
+
     @mock.patch.object(HeaderPy, "_loop_through_files_opt_out")
     @mock.patch.object(HeaderPy, "_loop_through_files_opt_in")
     @mock.patch("builtins.print", return_value=None)
@@ -164,17 +167,36 @@ class TestHeaderRCSettings:
         mock_loop_through_files_opt_in: MagicMock,
         mock_loop_through_files_opt_out: MagicMock,
     ):
-
         h = HeaderPy(dry_run=True, verbose=True, unit_test_mode=True)
         h.header_rc.file_mode = File_Mode.OPT_OUT
         h.run()
-        
+
         mock_loop_through_files_opt_out.assert_called_once()
-        
+
         h.header_rc.file_mode = File_Mode.OPT_IN
         h.run()
         mock_loop_through_files_opt_in.assert_called_once()
 
+    @mock.patch.object(HeaderPy, "__init__", return_value=None)
+    @mock.patch.object(HeaderPy, "run", return_value=None)
+    @mock.patch("builtins.print", return_value=None)
+    def test_arg_parse_default(self, mock_print: MagicMock, mockHeaderPyRun: MagicMock, mockHeaderPy: MagicMock):
+        test_input = ["--unit-test-mode", "true"]
+        main(test_input)
 
-    # TODO: if self.verbose and not file_path.startswith(".git"):
-    # TODO: Test arg parse
+        args, kwargs = mockHeaderPy.call_args_list[0]
+        assert kwargs["verbose"] == False
+        assert kwargs["dry_run"] == False
+        assert kwargs["unit_test_mode"] == True
+
+    @mock.patch.object(HeaderPy, "__init__", return_value=None)
+    @mock.patch.object(HeaderPy, "run", return_value=None)
+    @mock.patch("builtins.print", return_value=None)
+    def test_arg_parse(self, mock_print: MagicMock, mockHeaderPyRun: MagicMock, mockHeaderPy: MagicMock):
+        test_input = ["--unit-test-mode", "true", "--dry-run", "true", "--verbose", "true"]
+        main(test_input)
+
+        args, kwargs = mockHeaderPy.call_args_list[0]
+        print(kwargs)
+        assert kwargs["dry_run"] == True
+        assert kwargs["verbose"] == True

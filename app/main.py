@@ -153,22 +153,32 @@ def _get_bool(config: dict[str, Any], input_str: str, default=False) -> bool:
     return default
 
 
-if __name__ == "__main__":
+def main(args=sys.argv[1:]) -> None:
     parser = argparse.ArgumentParser(
-        description="Add header action", formatter_class=argparse.RawDescriptionHelpFormatter, add_help=False
+        description="Add header action",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        add_help=False,
     )
+    
     parser.add_argument("--dry-run", help="Don't actually change files, but output effected files instead.")
     parser.add_argument("--verbose", help="Add more output to the console for debugging.")
+    parser.add_argument("--unit-test-mode", help="Only needed for unit test.")
 
-    args, unknown = parser.parse_known_args()
+    args, unknown = parser.parse_known_args(args)
     config = vars(args)  # Get args to print
 
     print("Arguments detected:", config)
     if unknown:
         print("Unknown arguments: ", unknown)
 
+    # ? NOTE: - is replaced with _ in args
     dry_run = _get_bool(config, "dry_run")
     verbose = _get_bool(config, "verbose")
+    unit_test_mode = _get_bool(config, "unit_test_mode", default=False)
 
-    h = HeaderPy(verbose=verbose, dry_run=dry_run)
+    h = HeaderPy(verbose=verbose, dry_run=dry_run, unit_test_mode=unit_test_mode)
     h.run()
+
+
+if __name__ == "__main__":
+    main()
