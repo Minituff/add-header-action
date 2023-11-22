@@ -9,6 +9,7 @@ from termcolor import cprint
 
 PYTHONPATH = os.environ.get("PYTHONPATH")
 cprint(f"PYTHONPATH: ${PYTHONPATH}", "yellow")
+cprint(f"PATH: ${Path().absolute()}", "yellow")
 
 
 from app.headerrc import HeaderRC, File_Mode
