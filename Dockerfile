@@ -3,7 +3,7 @@ FROM python:3.12-alpine
 LABEL maintainer="Minituff (James Tufarelli)"
 
 # Copy all these files into /app
-COPY requirements.txt headerrc-default.yml app/*.py /app/
+COPY requirements.txt headerrc-default.yml app/*.py ./app/
 
 # Install dependencies
 RUN \
@@ -12,7 +12,8 @@ RUN \
     echo "DEV v1"
 
 # Required for python imports to work
-ENV PYTHONPATH=/app
+ENV PYTHONPATH=.
+ENV PYTHONUNBUFFERED=1 
 
 # When the action runs, it will automatically map the default working directory (GITHUB_WORKSPACE) on the runner with the /github/workspace directory on the container.
 # https://docs.github.com/en/actions/creating-actions/creating-a-docker-container-action#accessing-files-created-by-a-container-action
