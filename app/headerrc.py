@@ -108,7 +108,10 @@ class HeaderRC:
             exit(1)
 
         with open(p, "r") as file:
+            if self.verbose:
+                print(f"Loaded default configuration file at {p}")
             return yaml.safe_load(file)
+        
 
     def _load_user_yml(self):
         file_name = ".headerrc.yml"
@@ -119,11 +122,10 @@ class HeaderRC:
         user_yml = {}
 
         if not p1.exists() and not p2.exists():
-            print("ERROR: Could not find configuration file.")
+            print("WARNING: Could not find configuration file.")
             print("Valid locations are:")
             print(f" - {p1}")
             print(f" - {p2}")
-            exit(1)
 
         if p1.exists():
             with open(p1, "r") as file:
