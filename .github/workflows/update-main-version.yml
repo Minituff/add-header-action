@@ -12,6 +12,7 @@ on:
         description: The major version to update
         options:
           - v0
+          - v1
 
 jobs:
   tag:

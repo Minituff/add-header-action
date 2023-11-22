@@ -20,6 +20,8 @@ untracked_files:
   - ^LICENSE$
   - __init__.py$ # These are just empty files
   - \.json$ # Most json files cannot contain comments
+  - \.png$
+  - \.jpe?g$
 
 
 # Automatically add everything in the .gitignore file into the untracked_files section
@@ -65,6 +67,7 @@ file_associations_by_comment:  #Format = Comment: List[Regex for file match]
     - "\\.cgi$"
     - "\\.awk$"
     - "\\.sed$"
+    - "\\.env$"
 
   "//":  # C-like single-line comment
     - "\\.c$"
