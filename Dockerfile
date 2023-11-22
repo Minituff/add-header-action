@@ -8,7 +8,8 @@ COPY requirements.txt headerrc-default.yml app/*.py /app/
 # Install dependencies
 RUN \
     echo "**** Install ****" && \
-    python3 -m pip install --no-cache-dir -r /app/requirements.txt
+    python3 -m pip install --no-cache-dir -r /app/requirements.txt && \
+    echo "DEV v1"
 
 # Required for python imports to work
 ENV PYTHONPATH=$PYTHONPATH:/app
@@ -19,7 +20,8 @@ VOLUME [ "/github/workspace" ]
 
 # Code file to execute when the docker container starts up
 # Args will be passed using CMD
-ENTRYPOINT ["python3", "app/main.py"]
+ENTRYPOINT ["python3", "/app/main.py"]
 
 # Do not use: USER or WORKDIR
 # https://docs.github.com/en/actions/creating-actions/dockerfile-support-for-github-actions
+# --workdir /github/workspace will be used by github
