@@ -7,19 +7,20 @@ import sys
 import argparse
 from termcolor import cprint
 
-from app.headerrc import HeaderRC, File_Mode
+from headerrc import HeaderRC, File_Mode
 
 
 class HeaderPy:
     def __init__(self, dry_run=False, verbose=False, unit_test_mode=False) -> None:
-        self.dry_run = dry_run
-        self.verbose = verbose
-        self.header_rc = HeaderRC(verbose=self.verbose, unit_test_mode=unit_test_mode)
+        self.dry_run: bool = dry_run
+        self.verbose: bool = verbose
+        self.header_rc: HeaderRC = HeaderRC(verbose=self.verbose, unit_test_mode=unit_test_mode)
+        self.file_mode: File_Mode = self.header_rc.file_mode
 
     def run(self) -> None:
-        if self.header_rc.file_mode == File_Mode.OPT_OUT:
+        if str(self.file_mode) == str(File_Mode.OPT_OUT):
             self._loop_through_files_opt_out(self.header_rc.ignores)
-        if self.header_rc.file_mode == File_Mode.OPT_IN:
+        elif str(self.file_mode) == str(File_Mode.OPT_IN):
             self._loop_through_files_opt_in(self.header_rc.accepts)
 
     def _add_header_to_file(
@@ -107,6 +108,7 @@ class HeaderPy:
                     self._add_header_to_file(full_file_path, rel_file_path, header, skip_prefixes, (prefix, suffix))
 
     def _loop_through_files_opt_out(self, re_ignore_patterns: List[Pattern]) -> None:
+        print("_loop_through_files_opt_out")
         base_dir = self.header_rc.work_path
 
         for root, _, files in os.walk(base_dir, topdown=True):

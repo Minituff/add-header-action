@@ -16,13 +16,12 @@ jobs:
         token: ${{ secrets.PAT }}
     
     - name: Add header action step
-      # uses: ./ # Uses an action in the root directory
-      uses: minituff/add-header-action@v0 # Change this to be the latest version, SHA, or branch name
+      uses: minituff/add-header-action@v1 # Change this to be the latest version, SHA, or branch name
       with:
         dry-run: true
         verbose: true
       env:
-         FORCE_COLOR: "1" # Optional: Shows color output in GitHub console.
+        FORCE_COLOR: "1" # Optional: Shows color output in GitHub console.
 
     - name: Commit changes back to repo
       uses: stefanzweifel/git-auto-commit-action@v5

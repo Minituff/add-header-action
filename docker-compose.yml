@@ -3,6 +3,7 @@ services:
   add-header-action:
     image: add-header-action # Use the local image
     container_name: add-header-action
+    working_dir: /github/workspace # Same as github will apply
     volumes:
       # This mount only works in github actions
       # - /workspaces/add-header-action:/github/workspace
@@ -11,6 +12,13 @@ services:
     # entrypoint: ["tail", "-f", "/dev/null"]
     command: |
       --dry-run
-      false
-      --verbose
       true
+      --verbose
+      false
+
+
+    # Github actions will create the following mounts
+    # -v "/home/runner/work/_temp/_github_home":"/github/home" 
+    # -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" 
+    # -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" 
+    # -v "/home/runner/work/nautical-backup/nautical-backup":"/github/workspace"

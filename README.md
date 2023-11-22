@@ -75,11 +75,12 @@ jobs:
         token: ${{ secrets.PAT }} # (only needed for private repos)
     
     - name: Add header action step
-      uses: minituff/add-header-action@v0
-      id: add-header-action
+      uses: minituff/add-header-action@v1
       with:
         dry-run: false # Don't make any changes, but log what *would* change.
         verbose: false # Extra logging to help you debug.
+      env:
+        FORCE_COLOR: "1" # Optional: Shows color output in GitHub console.
 
     - name: Commit and Push changes back to repo
       uses: stefanzweifel/git-auto-commit-action@v5
@@ -100,7 +101,7 @@ Create a `.headerrc.yml` file in either the `.github` **or** *root* diretory of 
  ┗ 📜.gitignore
 ```
 
-This action loads default values  from the [headerrc-default.yml](/headerrc-default.yml) <small>(this is built into the action)</small>, then merges them with the values from the [.headerrc.yml](/.github/.headerrc.yml) file from your repo.
+This action loads default values from the [headerrc-default.yml](/headerrc-default.yml) <small>(this is built into the action)</small>, then merges them with the values from the [.headerrc.yml](/.github/.headerrc.yml) file from your repo.
 
 The following are a list of configurable options in the `.headerrc.yml`:
 
@@ -163,6 +164,40 @@ skip_lines_that_have:
   ".sh$": ["#!"]
 ```
 
+## Understanding Negation
+This action comes pre-loaded with many common files types in the [headerrc-default.yml](/headerrc-default.yml).
+However, some of these file types may be incorrect for your project. To fix this, we allow *negation* of default items.
+
+
+To negate something, the format is `<negate_characters><item headerrc-default.yml>`.
+
+For example, we filter out the `.gitignore` in the [headerrc-default.yml](/headerrc-default.yml)
+```yml
+untracked_files:
+  - ^\.gitignore
+```
+But if you would like to remove this item from the `untracked_files`. Simply add it to your `.headerrc.yml` with the `negation_characters` as the prefix.
+It must match EXACTLY with is in the in the [headerrc-default.yml](/headerrc-default.yml).
+
+```yml
+untracked_files:
+  - !^\.gitignore  <-- Negate ^\.gitignore
+```
+
+You can also change the negate_characters to be anything you'd like if the default clashes with your regex.
+```yml
+negate_characters: "++" # Default "!"
+```
+
+### What can be negated?
+
+1. `tracked_files`
+1. `untracked_files`
+1. `file_associations_by_comment`
+1. `file_associations_by_extension`
+1. `skip_lines_that_have`
+
+Negation is an easy to to remove the default settings, but if we have a file association wrong, please submit an Issue or PR so we can fix it for everyone.
 
 ## Developing & Contributing
 Pull Requests are welcome. 
