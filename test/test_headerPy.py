@@ -168,12 +168,12 @@ class TestHeaderRCSettings:
         mock_loop_through_files_opt_out: MagicMock,
     ):
         h = HeaderPy(dry_run=True, verbose=True, unit_test_mode=True)
-        h.header_rc.file_mode = File_Mode.OPT_OUT
+        h.file_mode = File_Mode.OPT_OUT
         h.run()
 
         mock_loop_through_files_opt_out.assert_called_once()
 
-        h.header_rc.file_mode = File_Mode.OPT_IN
+        h.file_mode = File_Mode.OPT_IN
         h.run()
         mock_loop_through_files_opt_in.assert_called_once()
 

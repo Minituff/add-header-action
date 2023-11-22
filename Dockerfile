@@ -8,8 +8,7 @@ COPY requirements.txt headerrc-default.yml app/*.py /app/
 # Install dependencies
 RUN \
     echo "**** Install ****" && \
-    python3 -m pip install --no-cache-dir -r /app/requirements.txt && \
-    echo "DEV v2"
+    python3 -m pip install --no-cache-dir -r /app/requirements.txt
 
 # Required for python imports to work
 ENV PYTHONPATH=.

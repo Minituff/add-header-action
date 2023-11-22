@@ -111,7 +111,6 @@ class HeaderRC:
             if self.verbose:
                 print(f"Loaded default configuration file at {p}")
             return yaml.safe_load(file)
-        
 
     def _load_user_yml(self):
         file_name = ".headerrc.yml"
