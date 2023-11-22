@@ -22,7 +22,7 @@ jobs:
         dry-run: true
         verbose: true
       env:
-         FORCE_COLOR: "1" # Optional: Shows color output in GitHub console.
+        FORCE_COLOR: "1" # Optional: Shows color output in GitHub console.
 
     - name: Commit changes back to repo
       uses: stefanzweifel/git-auto-commit-action@v5

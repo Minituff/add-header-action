@@ -11,6 +11,6 @@ services:
     # entrypoint: ["tail", "-f", "/dev/null"]
     command: |
       --dry-run
-      false
-      --verbose
       true
+      --verbose
+      false
