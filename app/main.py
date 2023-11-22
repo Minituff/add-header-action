@@ -108,7 +108,6 @@ class HeaderPy:
                     self._add_header_to_file(full_file_path, rel_file_path, header, skip_prefixes, (prefix, suffix))
 
     def _loop_through_files_opt_out(self, re_ignore_patterns: List[Pattern]) -> None:
-        print("_loop_through_files_opt_out")
         base_dir = self.header_rc.work_path
 
         for root, _, files in os.walk(base_dir, topdown=True):
