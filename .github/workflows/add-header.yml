@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - dev # TODO: REMOVE (and fix uses below)
 
 jobs:
   build:
@@ -17,7 +18,7 @@ jobs:
     
     - name: Add header action step
       # uses: ./ # Uses an action in the root directory
-      uses: minituff/add-header-action@v0 # Change this to be the latest version, SHA, or branch name
+      uses: minituff/add-header-action@dev # Change this to be the latest version, SHA, or branch name
       with:
         dry-run: true
         verbose: true
