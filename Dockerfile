@@ -12,7 +12,7 @@ RUN \
     echo "DEV v1"
 
 # Required for python imports to work
-ENV PYTHONPATH=$PYTHONPATH:/app
+ENV PYTHONPATH=/app
 
 # When the action runs, it will automatically map the default working directory (GITHUB_WORKSPACE) on the runner with the /github/workspace directory on the container.
 # https://docs.github.com/en/actions/creating-actions/creating-a-docker-container-action#accessing-files-created-by-a-container-action

@@ -8,7 +8,7 @@ import argparse
 from termcolor import cprint
 
 PYTHONPATH = os.environ.get("PYTHONPATH")
-print(f"PYTHONPATH: ${PYTHONPATH}")
+cprint(f"PYTHONPATH: ${PYTHONPATH}", "yellow")
 
 
 from app.headerrc import HeaderRC, File_Mode
