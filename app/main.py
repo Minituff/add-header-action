@@ -11,6 +11,8 @@ PYTHONPATH = os.environ.get("PYTHONPATH")
 cprint(f"PYTHONPATH: ${PYTHONPATH}", "yellow")
 cprint(f"PATH: ${Path().absolute()}", "yellow")
 
+print(os.listdir(Path()))
+
 
 from app.headerrc import HeaderRC, File_Mode
 
