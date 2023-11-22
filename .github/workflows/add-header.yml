@@ -18,16 +18,13 @@ jobs:
     - name: Add header action step
       # uses: ./ # Uses an action in the root directory
       uses: minituff/add-header-action@v0 # Change this to be the latest version, SHA, or branch name
-      id: add-header-action
       with:
         dry-run: true
         verbose: true
+      env:
+         FORCE_COLOR: "1" # Optional: Shows color output in GitHub console.
 
     - name: Commit changes back to repo
       uses: stefanzweifel/git-auto-commit-action@v5
         # Token comes from actions/checkout
-
-env: 
-  # The "FORCE_COLOR" variable, when set to 1, tells Nox to colorize itself.
-  # This is only useful when debug-mode is True
-  FORCE_COLOR: "1"
+ 
