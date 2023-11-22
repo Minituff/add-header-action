@@ -7,16 +7,6 @@ import sys
 import argparse
 from termcolor import cprint
 
-# PYTHONPATH = os.environ.get("PYTHONPATH")
-# cprint(f"PYTHONPATH: ${PYTHONPATH}", "yellow")
-# cprint(f"PATH: ${Path().absolute()}", "yellow")
-
-# print("PATH DIR")
-# print(os.listdir(Path()))
-# print("APP DIR")
-# print(os.listdir(Path("/app")))
-
-
 from headerrc import HeaderRC, File_Mode
 
 
