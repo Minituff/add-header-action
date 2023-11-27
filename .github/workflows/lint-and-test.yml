@@ -12,7 +12,7 @@ on:
   push:
     branches:
       - main
-      - contaier-tests #TODO: Remove
+      - container-tests #TODO: Remove
 
 jobs:
   build:
