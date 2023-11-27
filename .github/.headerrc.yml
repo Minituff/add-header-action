@@ -1,8 +1,9 @@
 name: This file is used to set configuration for the add-header action
 
-# Choose what to do with the header. [add, remove]
-# If "remove" is used, the header will only be removed if it matches exactly.
-header_action: add # Options: add, remove. Default: add
+# Choose what to do with the header.
+# remove  =  Remove an existing header from matching files.
+# add     =  Add the header to any matching files.
+header_action: add # Default: add
 
 # Decide the method for choosing which files to add headers to
 # opt-out  =  all files will be selected unless the file path matches untracked_files

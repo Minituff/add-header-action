@@ -103,6 +103,11 @@ This action loads default values from the [headerrc-default.yml](/headerrc-defau
 The following are a list of configurable options in the `.headerrc.yml`:
 
 ```yaml
+# Choose what to do with the header.
+# remove  =  Remove an existing header from matching files.
+# add     =  Add the header to any matching files.
+header_action: add # Default: add
+
 # Decide the method for choosing which files to add headers to.
 # opt-out  =  all files will be selected unless the file path matches untracked_files.
 # opt-in   =   no files will be selected unless the file path matches anything in tracked_files.

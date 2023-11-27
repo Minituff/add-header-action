@@ -4,7 +4,7 @@ import pytest
 import mock
 from mock import MagicMock, mock_open
 
-from app.headerrc import HeaderRC, File_Mode
+from app.headerrc import HeaderRC, File_Mode, Header_Action
 
 
 # All functions in this class have mocks
@@ -138,6 +138,25 @@ class TestHeaderRCSettings:
         _load_user_yml.return_value = mock_yml
         h = HeaderRC(unit_test_mode=True)
         assert h.file_mode == File_Mode.OPT_OUT
+        
+        
+    def test_header_action_settting(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
+        mock_yml = {"header_action": "add"}
+        _load_default_yml.return_value = mock_yml
+        _load_user_yml.return_value = mock_yml
+
+        h = HeaderRC(unit_test_mode=True)
+        assert h.header_action == Header_Action.ADD
+
+        mock_yml["header_action"] = "remove"
+        _load_user_yml.return_value = mock_yml
+        h = HeaderRC(unit_test_mode=True)
+        assert h.header_action == Header_Action.REMOVE
+
+        del mock_yml["header_action"]
+        _load_user_yml.return_value = mock_yml
+        h = HeaderRC(unit_test_mode=True)
+        assert h.header_action == Header_Action.ADD
 
     def test_negate_characters(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
         mock_yml = {"negate_characters": "++"}
