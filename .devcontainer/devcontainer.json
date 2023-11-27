@@ -24,7 +24,8 @@
 				"aaron-bond.better-comments",
 				"njpwerner.autodocstring",
 				"pkief.material-icon-theme",
-				"redhat.vscode-yaml"
+				"redhat.vscode-yaml",
+				"tamasfe.even-better-toml"
 			],
 			"settings": {
 				// "http.proxyStrictSSL": false, // Fixes extensions not installing if you use a proxy
