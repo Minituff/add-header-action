@@ -35,6 +35,10 @@ echo "alias test=\"home && clear && python3 -m pytest -vs --cov app --cov-report
 
 clear
 
+cecho "CYAN" "Installing pre-commit..."
+pre-commit install
+
+
 cecho "GREEN" "-- Init complete -- Development enviornment ready to go!!"
 
 

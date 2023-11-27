@@ -26,10 +26,10 @@ jobs:
         python-version: '3.12'
       
     - name: Install dependencies
-      run: python3 -m pip install -r requirements.txt
+      run: python3 -m pip install -r requirements-dev.txt
 
     - name: Black formatter check
-      run: python3 -m black --line-length 120 --check --verbose app
+      run: python3 -m black --check --verbose app
     
     - name: Run Pytest
       run: python3 -m pytest --cov app --cov-report html --cov-report term --cov-report xml
