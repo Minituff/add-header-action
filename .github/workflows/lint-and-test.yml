@@ -1,4 +1,4 @@
-name: Python Lint & Test
+name: Lint & Test
 
 on:
   workflow_dispatch: # Allow manually running
@@ -12,10 +12,11 @@ on:
   push:
     branches:
       - main
+      - contaier-tests #TODO: Remove
 
 jobs:
   build:
-    name: Python lint
+    name: Unit tests & coverage
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -41,3 +42,22 @@ jobs:
       with:
         fail_ci_if_error: true
         files: coverage.xml
+  
+  docker_integation_tests:
+    name: Integration tests 
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Build and export Docker image
+      uses: docker/build-push-action@v5.1.0
+      with:
+        context: .
+        load: true # Do not push this image
+        tags: minituff/add-header-action
+  
+    - name: Run integration tests against Docker image
+      run: docker compose run add-header-action

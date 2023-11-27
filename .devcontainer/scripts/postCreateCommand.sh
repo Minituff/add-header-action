@@ -22,7 +22,7 @@ echo "Adding aliases (for convenience)..."
 echo "alias home=\"cd /workspaces/add-header-action\"" >> ~/.zshrc
 
 # Build the container to test locally
-echo "alias build=\"home && docker build -t add-header-action --no-cache .\"" >> ~/.zshrc
+echo "alias build=\"home && docker build -t minituff/add-header-action --no-cache .\"" >> ~/.zshrc
 
 # Run the script locally
 echo "alias run=\"home && python3 app/main.py --verbose false --dry-run false\"" >> ~/.zshrc

@@ -1,13 +1,33 @@
 version: '3'
-services:  
+services:
+  # This service is used by GitHub actions
   add-header-action:
-    image: add-header-action # Use the local image
+    image: minituff/add-header-action # Use the local image
     container_name: add-header-action
     working_dir: /github/workspace # Same as github will apply
     volumes:
       # This mount only works in github actions
       # - /workspaces/add-header-action:/github/workspace
-      - C:\Users\James-PC\IdeaProjects\add-header-action:/github/workspace
+      - $PWD/test:/github/workspace
+    command: |
+      --dry-run
+      true
+      --verbose
+      false
+    
+    # Github actions will create the following mounts
+    # -v "/home/runner/work/_temp/_github_home":"/github/home" 
+    # -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" 
+    # -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" 
+    # -v "/home/runner/work/nautical-backup/nautical-backup":"/github/workspace"
+
+  # This service is only locally for development
+  add-header-action-local:
+    image: minituff/add-header-action # Use the local image
+    container_name: add-header-action
+    working_dir: /github/workspace # Same as github will apply
+    volumes:
+      - C:\Users\James-PC\IdeaProjects\add-header-action\test:/github/workspace
     # Use this to keep the container open so you can shell inside it
     # entrypoint: ["tail", "-f", "/dev/null"]
     command: |
@@ -15,10 +35,3 @@ services:
       true
       --verbose
       false
-
-
-    # Github actions will create the following mounts
-    # -v "/home/runner/work/_temp/_github_home":"/github/home" 
-    # -v "/home/runner/work/_temp/_github_workflow":"/github/workflow" 
-    # -v "/home/runner/work/_temp/_runner_file_commands":"/github/file_commands" 
-    # -v "/home/runner/work/nautical-backup/nautical-backup":"/github/workspace"
