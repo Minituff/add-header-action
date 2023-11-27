@@ -7,7 +7,7 @@ import sys
 import argparse
 from termcolor import cprint
 
-from headerrc import HeaderRC, File_Mode, Header_Action
+from app.headerrc import HeaderRC, File_Mode, Header_Action
 
 
 class HeaderPy:
