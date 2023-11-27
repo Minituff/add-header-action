@@ -138,8 +138,7 @@ class TestHeaderRCSettings:
         _load_user_yml.return_value = mock_yml
         h = HeaderRC(unit_test_mode=True)
         assert h.file_mode == File_Mode.OPT_OUT
-        
-        
+
     def test_header_action_settting(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
         mock_yml = {"header_action": "add"}
         _load_default_yml.return_value = mock_yml

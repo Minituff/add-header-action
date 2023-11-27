@@ -124,7 +124,7 @@ class TestHeaderRCSettings:
         with tmp_path.open("r+", encoding="utf-8") as file:
             contents = file.read()
             assert contents == "# HEADER\n\nSome basic stuff"
-            
+
     @mock.patch("builtins.print", return_value=None)
     def test_remove_header_from_file(self, mock_print: MagicMock, tmp_path: Path):
         tmp_path = tmp_path / "tmp-file.txt"
@@ -132,13 +132,12 @@ class TestHeaderRCSettings:
             f.write("# HEADER\n\nSome basic stuff")
 
         h = HeaderPy(dry_run=False, verbose=True, unit_test_mode=True)
-        h._remove_header_from_file(
-            file_path=tmp_path, relative_file_path=tmp_path, header="# HEADER")
+        h._remove_header_from_file(file_path=tmp_path, relative_file_path=tmp_path, header="# HEADER")
 
         with tmp_path.open("r+", encoding="utf-8") as file:
             contents = file.read()
             assert contents == "\nSome basic stuff"
-            
+
     @mock.patch("builtins.print", return_value=None)
     def test_not_remove_header_from_file(self, mock_print: MagicMock, tmp_path: Path):
         tmp_path = tmp_path / "tmp-file.txt"
@@ -146,8 +145,7 @@ class TestHeaderRCSettings:
             f.write("Some basic stuff")
 
         h = HeaderPy(dry_run=False, verbose=True, unit_test_mode=True)
-        h._remove_header_from_file(
-            file_path=tmp_path, relative_file_path=tmp_path, header="# HEADER")
+        h._remove_header_from_file(file_path=tmp_path, relative_file_path=tmp_path, header="# HEADER")
 
         with tmp_path.open("r+", encoding="utf-8") as file:
             contents = file.read()

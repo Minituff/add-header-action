@@ -15,6 +15,7 @@ class File_Mode(Enum):
     OPT_OUT = 1  # Default
     OPT_IN = 2
 
+
 class Header_Action(Enum):
     ADD = 1  # Default
     REMOVE = 2
@@ -50,7 +51,7 @@ class HeaderRC:
         self.header = self._get_header()
 
         self.file_mode: File_Mode = self._get_file_mode()
-        
+
         self.header_action: Header_Action = self._get_header_action()
 
         self.ignores: list[Pattern] = []
@@ -72,7 +73,7 @@ class HeaderRC:
         cprint("Header:", "magenta")
         cprint(self.header, "green")
         print("")
-        
+
         if self.header_action == Header_Action.ADD:
             cprint("Header Action: ", "magenta", end="")
             cprint("add\n", "green")
@@ -80,7 +81,6 @@ class HeaderRC:
         if self.header_action == Header_Action.REMOVE:
             cprint("Header Action: ", "magenta", end="")
             cprint("remove\n", "green")
-        
 
         if self.file_mode == File_Mode.OPT_OUT:
             cprint("File-mode: ", "magenta", end="")
@@ -402,7 +402,7 @@ class HeaderRC:
     def _get_file_mode(self) -> File_Mode:
         f1 = str(self.user_yml.get("file_mode", ""))
         f2 = str(self.default_yml.get("file_mode", ""))
-        if f1: # Prioritize user-yml
+        if f1:  # Prioritize user-yml
             if f1 == "opt-out":
                 return File_Mode.OPT_OUT
             elif f1 == "opt-in":
@@ -416,11 +416,11 @@ class HeaderRC:
             return File_Mode.OPT_OUT
 
         return File_Mode.OPT_OUT
-    
+
     def _get_header_action(self) -> Header_Action:
         f1 = str(self.user_yml.get("header_action", ""))
         f2 = str(self.default_yml.get("header_action", ""))
-        if f1: # Prioritize user-yml
+        if f1:  # Prioritize user-yml
             if f1 == "add":
                 return Header_Action.ADD
             elif f1 == "remove":

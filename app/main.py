@@ -111,12 +111,12 @@ class HeaderPy:
                 print(f"Would remove header from - {relative_file_path}")
                 return
             print(f"Removing header from - {relative_file_path}")
-            
+
             file.seek(0)
             content = file.read()
 
             # Remove the header from content
-            content = content.replace(header, '', 1)
+            content = content.replace(header, "", 1)
 
             # Write back the modified content
             file.seek(0)
