@@ -6,7 +6,7 @@ import mock
 from mock import MagicMock, call, mock_open
 
 from app.main import HeaderPy, _get_bool, main
-from app.headerrc import File_Mode
+from app.headerrc import File_Mode, Header_Action
 
 
 class TestHeaderRCSettings:
@@ -49,6 +49,7 @@ class TestHeaderRCSettings:
 
         h = HeaderPy(dry_run=True, verbose=True, unit_test_mode=True)
         h.header_rc.header = "Header"
+        h.header_action = Header_Action.ADD
         h.header_rc._file_associations = {".js": "//", ".sh": "#", ".txt": "", "\\.md$": ["<!--", "-->"]}
 
         ignores = [re.compile(r"bad")]
@@ -96,6 +97,7 @@ class TestHeaderRCSettings:
         h = HeaderPy(dry_run=True, verbose=True, unit_test_mode=True)
         h.header_rc.header = "Header"
         h.header_rc.file_mode = File_Mode.OPT_OUT
+        h.header_action = Header_Action.ADD
         h.header_rc._file_associations = {".js": "//", ".sh": "#", ".txt": "", "\\.md$": ["<!--", "-->"]}
 
         accepts = [re.compile(r"good")]
