@@ -113,7 +113,7 @@ header_action: add # Default: add
 # Decide the method for choosing which files to add headers to.
 # opt-out  =  all files will be selected unless the file path matches untracked_files.
 # opt-in   =   no files will be selected unless the file path matches anything in tracked_files.
-file_mode: opt-out
+file_mode: opt-out # Default: opt-out
 
 # A list of regex used to match file paths to receive the header. (opt-in mode only)
 tracked_files: 
@@ -127,9 +127,9 @@ untracked_files:
 
 # Automatically add everything in the .gitignore file into the untracked_files section.
 # This can save lots of time because most of these files can be ignored.  (opt-in mode only)
-untrack_gitignore: true # Default = true
+untrack_gitignore: true # Default: true
 
-use_default_file_settings: true # Default = true
+use_default_file_settings: true # Default: true
 
 # The header to be added. Do not add the comment (#, //) here, see the file_associations section for that.
 header: |
@@ -143,7 +143,7 @@ header: |
 
 # Customize the negation character. See below for how to use this.
 # Any *default* file assocation that has this character at the beginning of the (key/value) will be removed. This only works if it is matched exactly. 
-negate_characters: "!" # Default = "!"
+negate_characters: "!" # Default: "!"
 
 # Group mulitple items by the comment value.
 file_associations_by_comment:
