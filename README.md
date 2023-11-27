@@ -1,8 +1,5 @@
-<!-- SUPER SECRET CONFIDENTIAL -->
-<!-- [2023] - [Infinity and Beyond] ACME CO -->
-<!-- All Rights Reserved. -->
-<!-- NOTICE: This is super secret info that -->
-<!-- must be protected at all costs. -->
+# Add header-action
+[![GitHub Marketplace](https://img.shields.io/badge/Marketplace-active-undefined.svg?logo=github&logoColor=white&style=fecret info that -->
 
 
 # Add header-action

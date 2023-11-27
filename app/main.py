@@ -90,6 +90,7 @@ class HeaderPy:
         if isinstance(file_path, str):
             file_path = Path(file_path)
 
+        header += "\n"
         # Read the beginning of the file to check for the header
         header_bytes = sys.getsizeof(header) + 100
 
@@ -110,11 +111,17 @@ class HeaderPy:
                 print(f"Would remove header from - {relative_file_path}")
                 return
             print(f"Removing header from - {relative_file_path}")
+            
+            file.seek(0)
+            content = file.read()
 
-            start_of_file = start_of_file.replace(header, "", 1)
-            file.seek(0, 0)  # Move to the start of the file
-            file.write(start_of_file)  # Write the modified content
-            file.truncate()  # Truncate in case the new content is shorter
+            # Remove the header from content
+            content = content.replace(header, '', 1)
+
+            # Write back the modified content
+            file.seek(0)
+            file.write(content)
+            file.truncate()  # Truncate to remove any leftover content
 
     def _loop_through_files_opt_in(self, re_accept_patterns: List[Pattern]) -> None:
         base_dir = self.header_rc.work_path
@@ -141,7 +148,7 @@ class HeaderPy:
                 if succes:
                     if str(self.header_action) == str(Header_Action.REMOVE):
                         self._remove_header_from_file(full_file_path, rel_file_path, header)
-                    elif str(self.header_action) == str(Header_Action.REMOVE):
+                    elif str(self.header_action) == str(Header_Action.ADD):
                         skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
                         self._add_header_to_file(full_file_path, rel_file_path, header, skip_prefixes, (prefix, suffix))
 
@@ -180,7 +187,7 @@ class HeaderPy:
                 if success:
                     if str(self.header_action) == str(Header_Action.REMOVE):
                         self._remove_header_from_file(full_file_path, rel_file_path, header)
-                    elif str(self.header_action) == str(Header_Action.REMOVE):
+                    elif str(self.header_action) == str(Header_Action.ADD):
                         skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
                         self._add_header_to_file(full_file_path, rel_file_path, header, skip_prefixes, (prefix, suffix))
 

@@ -29,6 +29,8 @@ untracked_files:
   - test/
   - htmlcov/
   - .coverage
+  - coverage.xml
+  # - pytest.ini
 
 # Automatically add everything in the .gitignore file into the untracked_files section
 # This can save lots of time because most of these files can be ignored.
