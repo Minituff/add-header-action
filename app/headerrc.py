@@ -173,6 +173,7 @@ class HeaderRC:
                         patterns.append(re.compile(regex_pattern))
         except FileNotFoundError:
             print(f"No .gitignore file found at {gitignore_path}")
+            print(f"If you have no .gitignore file, then set 'untrack_gitignore' to 'false'")
         return patterns
 
     def _load_ignores(self) -> list[Pattern]:
