@@ -14,7 +14,7 @@ cecho() {
 
 
 cecho "CYAN" "Installing python packages (for local development)..."
-python3 -m pip install -r requirements.txt --upgrade pip
+python3 -m pip install -r requirements-dev.txt --upgrade pip
 
 echo "Adding aliases (for convenience)..."
 
