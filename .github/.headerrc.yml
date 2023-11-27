@@ -1,5 +1,9 @@
 name: This file is used to set configuration for the add-header action
 
+# Choose what to do with the header. [add, remove]
+# If "remove" is used, the header will only be removed if it matches exactly.
+header_action: remove # Options: add, remove. Default: add
+
 # Decide the method for choosing which files to add headers to
 # opt-out  =  all files will be selected unless the file path matches untracked_files
 # opt-in   =  no  files will be selected unless the file path matches anything in tracked_files
@@ -24,6 +28,7 @@ untracked_files:
   - ^Dockerfile$
   - test/
   - htmlcov/
+  - .coverage
 
 # Automatically add everything in the .gitignore file into the untracked_files section
 # This can save lots of time because most of these files can be ignored.

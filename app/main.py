@@ -7,7 +7,7 @@ import sys
 import argparse
 from termcolor import cprint
 
-from headerrc import HeaderRC, File_Mode
+from headerrc import HeaderRC, File_Mode, Header_Action
 
 
 class HeaderPy:
@@ -16,6 +16,7 @@ class HeaderPy:
         self.verbose: bool = verbose
         self.header_rc: HeaderRC = HeaderRC(verbose=self.verbose, unit_test_mode=unit_test_mode)
         self.file_mode: File_Mode = self.header_rc.file_mode
+        self.header_action: Header_Action = self.header_rc.header_action
 
     def run(self) -> None:
         if str(self.file_mode) == str(File_Mode.OPT_OUT):
@@ -80,6 +81,41 @@ class HeaderPy:
             file.write(modified_content)  # Write the modified content
             file.truncate()  # Truncate in case the new content is shorter
 
+    def _remove_header_from_file(
+        self,
+        file_path: Union[Path, str],
+        relative_file_path: Union[Path, str],
+        header: str,
+    ) -> None:
+        if isinstance(file_path, str):
+            file_path = Path(file_path)
+
+        # Read the beginning of the file to check for the header
+        header_bytes = sys.getsizeof(header) + 100
+
+        with file_path.open("r+", encoding="utf-8") as file:
+            try:
+                start_of_file = file.read(header_bytes)
+            except UnicodeDecodeError as e:
+                if self.verbose is True:
+                    cprint(f"Can't decode - {file_path}", "red")
+                return
+
+            if header not in start_of_file:
+                if self.verbose or self.dry_run:
+                    print(f"Header not in - {relative_file_path}")
+                return  # Header not present, no need to remove it
+
+            if self.dry_run:
+                print(f"Would remove header from - {relative_file_path}")
+                return
+            print(f"Removing header from - {relative_file_path}")
+
+            start_of_file = start_of_file.replace(header, "", 1)
+            file.seek(0, 0)  # Move to the start of the file
+            file.write(start_of_file)  # Write the modified content
+            file.truncate()  # Truncate in case the new content is shorter
+
     def _loop_through_files_opt_in(self, re_accept_patterns: List[Pattern]) -> None:
         base_dir = self.header_rc.work_path
 
@@ -103,9 +139,11 @@ class HeaderPy:
 
                 header, prefix, suffix, succes = self.header_rc.get_header_for_file(file)
                 if succes:
-                    skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
-
-                    self._add_header_to_file(full_file_path, rel_file_path, header, skip_prefixes, (prefix, suffix))
+                    if str(self.header_action) == str(Header_Action.REMOVE):
+                        self._remove_header_from_file(full_file_path, rel_file_path, header)
+                    elif str(self.header_action) == str(Header_Action.REMOVE):
+                        skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
+                        self._add_header_to_file(full_file_path, rel_file_path, header, skip_prefixes, (prefix, suffix))
 
     def _loop_through_files_opt_out(self, re_ignore_patterns: List[Pattern]) -> None:
         base_dir = self.header_rc.work_path
@@ -136,14 +174,15 @@ class HeaderPy:
                         cprint(f"Skip (not a file) - {file_path}", "yellow")
                     continue
 
-                relative_file_path = Path(file_path)
+                rel_file_path = Path(file_path)
 
                 header, prefix, suffix, success = self.header_rc.get_header_for_file(file)
                 if success:
-                    skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
-                    self._add_header_to_file(
-                        full_file_path, relative_file_path, header, skip_prefixes, (prefix, suffix)
-                    )
+                    if str(self.header_action) == str(Header_Action.REMOVE):
+                        self._remove_header_from_file(full_file_path, rel_file_path, header)
+                    elif str(self.header_action) == str(Header_Action.REMOVE):
+                        skip_prefixes = self.header_rc.get_skip_lines_that_start_for_file(file)
+                        self._add_header_to_file(full_file_path, rel_file_path, header, skip_prefixes, (prefix, suffix))
 
 
 def _get_bool(config: dict[str, Any], input_str: str, default=False) -> bool:
