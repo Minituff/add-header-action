@@ -5,6 +5,7 @@ services:
     image: minituff/add-header-action # Use the local image
     container_name: add-header-action
     working_dir: /github/workspace # Same as github will apply
+    tty: true
     volumes:
       # This mount only works in github actions
       # - /workspaces/add-header-action:/github/workspace
@@ -24,8 +25,9 @@ services:
   # This service is only locally for development
   add-header-action-local:
     image: minituff/add-header-action # Use the local image
-    container_name: add-header-action
+    container_name: add-header-action-local
     working_dir: /github/workspace # Same as github will apply
+    tty: true
     volumes:
       - C:\Users\James-PC\IdeaProjects\add-header-action\test:/github/workspace
     # Use this to keep the container open so you can shell inside it
@@ -34,4 +36,4 @@ services:
       --dry-run
       true
       --verbose
-      false
+      true
