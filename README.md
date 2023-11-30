@@ -75,9 +75,10 @@ jobs:
     
     - name: Add header action step
       uses: minituff/add-header-action@v1
-      with:
+      with: # All arguments are optional, see the defaults below
         dry-run: false # Don't make any changes, but log what *would* change.
         verbose: false # Extra logging to help you debug.
+        file-name: .headerrc.yml # The name of your settings file.
       env:
         FORCE_COLOR: "1" # Optional: Shows color output in GitHub console.
 
@@ -202,6 +203,16 @@ negate_characters: "++" # Default "!"
 1. `skip_lines_that_have`
 
 Negation is an easy to to remove the default settings, but if we have a file association wrong, please submit an Issue or PR so we can fix it for everyone.
+
+
+## Default arguemnts values
+
+If your choose not to set any arguments in your GitHub workflows, they will take the following values:
+```yml
+dry-run: false 
+verbose: false
+file-name: .headerrc.yml # Located in either the `.github` or *root* diretory of your project.
+```
 
 ## Developing & Contributing
 Pull Requests are welcome. 

@@ -23,6 +23,7 @@ services:
     # -v "/home/runner/work/nautical-backup/nautical-backup":"/github/workspace"
 
   # This service is only locally for development
+  # docker compose run add-header-action-local
   add-header-action-local:
     image: minituff/add-header-action # Use the local image
     container_name: add-header-action-local
@@ -37,3 +38,5 @@ services:
       true
       --verbose
       true
+      --file-name
+      .headerrc.yml

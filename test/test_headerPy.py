@@ -216,14 +216,16 @@ class TestHeaderRCSettings:
         assert kwargs["verbose"] == False
         assert kwargs["dry_run"] == False
         assert kwargs["unit_test_mode"] == True
+        assert kwargs["file_name"] == ".headerrc.yml"
 
     @mock.patch.object(HeaderPy, "__init__", return_value=None)
     @mock.patch.object(HeaderPy, "run", return_value=None)
     @mock.patch("builtins.print", return_value=None)
     def test_arg_parse(self, mock_print: MagicMock, mockHeaderPyRun: MagicMock, mockHeaderPy: MagicMock):
-        test_input = ["--unit-test-mode", "true", "--dry-run", "true", "--verbose", "true"]
+        test_input = ["--unit-test-mode", "true", "--dry-run", "true", "--verbose", "true", "--file-name", ".new.yml"]
         main(test_input)
 
         args, kwargs = mockHeaderPy.call_args_list[0]
         assert kwargs["dry_run"] == True
         assert kwargs["verbose"] == True
+        assert kwargs["file_name"] == ".new.yml"

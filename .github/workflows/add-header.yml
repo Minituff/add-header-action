@@ -20,6 +20,7 @@ jobs:
       with:
         dry-run: true
         verbose: true
+        file-name: .headerrc.yml
       env:
         FORCE_COLOR: "1" # Optional: Shows color output in GitHub console.
 
