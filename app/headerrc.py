@@ -25,6 +25,9 @@ class HeaderRC:
     def __init__(self, verbose=False, unit_test_mode=False, use_default_paths=True, file_name=".headerrc.yml") -> None:
         self.verbose = verbose
         self.file_name = file_name
+        if not file_name.endswith(".yml") and not file_name.endswith(".yaml"):
+            cprint(f"WARNING: {file_name} is not of type .yml", "red")
+
         self.home_path = Path("/app/")
         self.work_path = Path("/github/workspace")
         if str(DEV_MODE).lower() == "true" or unit_test_mode == True:

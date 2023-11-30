@@ -277,6 +277,21 @@ class TestHeaderRCSettings:
             ".sh$": ["#!", "#!/bin/sh"],
         }
 
+    def test_file_name(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
+        mock_default_yml = {}
+        mock_user_yml = {}
+
+        _load_default_yml.return_value = mock_default_yml
+        _load_user_yml.return_value = mock_user_yml
+
+        h = HeaderRC(unit_test_mode=True, file_name="test.yml")
+
+        assert h.file_name == "test.yml"
+
+        h = HeaderRC(unit_test_mode=True)
+
+        assert h.file_name == ".headerrc.yml"
+
     @mock.patch("builtins.open", mock_open(read_data="# Environments\n \nbaz\n foo\n"))
     def test_untrack_gitignore(self, _load_user_yml: MagicMock, _load_default_yml: MagicMock):
         h = HeaderRC(
