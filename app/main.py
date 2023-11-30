@@ -63,7 +63,7 @@ class HeaderPy:
             skip_index = 0
             if skip_prefixes:
                 if self.verbose:
-                    cprint(f"skip_lines_that_start_with enabled for {file_path}" "yellow")
+                    cprint(f"skip_lines_that_start_with enabled for {file_path}", "yellow")
 
                 for i, line in enumerate(lines):
                     for pattern in skip_prefixes:

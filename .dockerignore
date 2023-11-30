@@ -1,0 +1,21 @@
+.devcontainer
+.git
+.github
+.pytest_cache
+# app
+htmlcov
+test
+.coverage
+.gitignore
+.pre-commit-config.yaml
+docker-compose.yml
+# Dockerfile
+# headerrc-default.yml
+LICENSE
+pyproject.toml
+README.md
+requirements-dev.txt
+# requirements.txt
+
+__pycache__
+*.log
