@@ -21,17 +21,19 @@ echo "Adding aliases (for convenience)..."
 # Go back to the workspace directory
 echo "alias home=\"cd /workspaces/add-header-action\"" >> ~/.zshrc
 
+echo "alias cls=\"clear\"" >> ~/.zshrc
+
 # Build the container to test locally
-echo "alias build=\"home && docker build -t minituff/add-header-action --no-cache .\"" >> ~/.zshrc
+echo "alias build=\" home && cls && docker build -t minituff/add-header-action --no-cache .\"" >> ~/.zshrc
 
 # Run the script locally
-echo "alias run=\"home && python3 app/main.py --verbose false --dry-run false\"" >> ~/.zshrc
+echo "alias run=\"home && cls && python3 app/main.py --verbose false --dry-run false\"" >> ~/.zshrc
 
 # Format all python files in /app and /test
 echo "alias format=\"python3 -m black --line-length 120 app test\"" >> ~/.zshrc
 
 # Run pytest and output report as hmtl
-echo "alias test=\"home && clear && python3 -m pytest -vs --cov app --cov-report html --cov-report term\"" >> ~/.zshrc
+echo "alias test=\"home && cls && python3 -m pytest -vs --cov app --cov-report html --cov-report term\"" >> ~/.zshrc
 
 clear
 

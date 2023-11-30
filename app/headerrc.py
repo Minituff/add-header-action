@@ -22,8 +22,9 @@ class Header_Action(Enum):
 
 
 class HeaderRC:
-    def __init__(self, verbose=False, unit_test_mode=False, use_default_paths=True) -> None:
+    def __init__(self, verbose=False, unit_test_mode=False, use_default_paths=True, file_name=".headerrc.yml") -> None:
         self.verbose = verbose
+        self.file_name = file_name
         self.home_path = Path("/app/")
         self.work_path = Path("/github/workspace")
         if str(DEV_MODE).lower() == "true" or unit_test_mode == True:
@@ -70,9 +71,8 @@ class HeaderRC:
         if not self.verbose:
             return
 
-        cprint("Header:", "magenta")
-        cprint(self.header, "green")
-        print("")
+        cprint("File Name: ", "magenta", end="")
+        cprint(f"{str(self.file_name)}\n", "green")
 
         if self.header_action == Header_Action.ADD:
             cprint("Header Action: ", "magenta", end="")
@@ -81,6 +81,10 @@ class HeaderRC:
         if self.header_action == Header_Action.REMOVE:
             cprint("Header Action: ", "magenta", end="")
             cprint("remove\n", "green")
+
+        cprint("Header:", "magenta")
+        cprint(self.header, "green")
+        print("")
 
         if self.file_mode == File_Mode.OPT_OUT:
             cprint("File-mode: ", "magenta", end="")
@@ -126,7 +130,7 @@ class HeaderRC:
             return yaml.safe_load(file)
 
     def _load_user_yml(self):
-        file_name = ".headerrc.yml"
+        file_name = self.file_name
         p = Path(self.work_path)
         p1 = p / f".github/{file_name}"
         p2 = p / f"{file_name}"
@@ -134,7 +138,7 @@ class HeaderRC:
         user_yml = {}
 
         if not p1.exists() and not p2.exists():
-            print("WARNING: Could not find configuration file.")
+            print(f"WARNING: Could not find configuration file '{file_name}'.")
             print("Valid locations are:")
             print(f" - {p1}")
             print(f" - {p2}")
