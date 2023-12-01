@@ -205,7 +205,7 @@ negate_characters: "++" # Default "!"
 Negation is an easy to to remove the default settings, but if we have a file association wrong, please submit an Issue or PR so we can fix it for everyone.
 
 
-## Default arguemnts values
+## Default argumnet values
 
 If your choose not to set any arguments in your GitHub workflows, they will take the following values:
 ```yml
