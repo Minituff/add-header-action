@@ -120,14 +120,14 @@ file_mode: opt-out # Default: opt-out
 tracked_files: 
   - ^README.md$
 
-# A list of regex used to match file paths to be skipped. (opt-in mode only)
+# A list of regex used to match file paths to be skipped. (opt-out mode only)
 # All file paths *not* matched will receive a header.
 untracked_files:
   - app/
   - ^Dockerfile$
 
 # Automatically add everything in the .gitignore file into the untracked_files section.
-# This can save lots of time because most of these files can be ignored.  (opt-in mode only)
+# This can save lots of time because most of these files can be ignored.  (opt-out mode only)
 untrack_gitignore: true # Default: true
 
 use_default_file_settings: true # Default: true
