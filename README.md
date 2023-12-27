@@ -43,9 +43,9 @@ function helloWorld() {
 ```html
 <!DOCTYPE html>
 
-<!-- SUPER SECRET CONFIDENTIAL  -->
-<!-- [2023] - [Infinity and Beyond] ACME Inc  -->
-<!-- All Rights Reserved.  -->
+<!-- SUPER SECRET CONFIDENTIAL -->
+<!-- [2023] - [Infinity and Beyond] ACME Inc -->
+<!-- All Rights Reserved. -->
 
 <html>
 <head>
