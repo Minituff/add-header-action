@@ -112,8 +112,8 @@ The following are a list of configurable options in the `.headerrc.yml`:
 header_action: add # Default: add
 
 # Decide the method for choosing which files to add headers to.
-# opt-out  =  all files will be selected unless the file path matches untracked_files.
-# opt-in   =   no files will be selected unless the file path matches anything in tracked_files.
+# opt-out  =  All files will be selected unless the file path matches untracked_files.
+# opt-in   =  No files will be selected unless the file path matches anything in tracked_files.
 file_mode: opt-out # Default: opt-out
 
 # A list of regex used to match file paths to receive the header. (opt-in mode only)
