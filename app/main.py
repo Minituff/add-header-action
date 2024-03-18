@@ -11,10 +11,11 @@ from headerrc import HeaderRC, File_Mode, Header_Action
 
 
 class HeaderPy:
-    def __init__(self, dry_run=False, verbose=False, unit_test_mode=False) -> None:
+    def __init__(self, dry_run=False, verbose=False, unit_test_mode=False, file_name=".headerrc.yml") -> None:
         self.dry_run: bool = dry_run
         self.verbose: bool = verbose
-        self.header_rc: HeaderRC = HeaderRC(verbose=self.verbose, unit_test_mode=unit_test_mode)
+        self.file_name: str = file_name
+        self.header_rc: HeaderRC = HeaderRC(verbose=verbose, unit_test_mode=unit_test_mode, file_name=file_name)
         self.file_mode: File_Mode = self.header_rc.file_mode
         self.header_action: Header_Action = self.header_rc.header_action
 
@@ -66,9 +67,9 @@ class HeaderPy:
                 return  # Header already present, no need to add it
 
             if self.dry_run:
-                cprint(f"Would add header to - {relative_file_path} - {prefix_suffix}", "light_blue")
+                print(f"Would add header to - {relative_file_path} - {prefix_suffix}")
                 return
-            cprint(f"Adding header to - {relative_file_path} - {prefix_suffix}", "light_blue")
+            print(f"Adding header to - {relative_file_path} - {prefix_suffix}")
 
             file.seek(0, 0)  # Rewind to start of the file for re-reading
             contents = file.read()  # Read the entire file
@@ -225,6 +226,9 @@ def main(args=sys.argv[1:]) -> None:
     parser.add_argument("--dry-run", help="Don't actually change files, but output effected files instead.")
     parser.add_argument("--verbose", help="Add more output to the console for debugging.")
     parser.add_argument("--unit-test-mode", help="Only needed for unit test.")
+    parser.add_argument(
+        "--file-name", help="Use a different file name other than .headerrc.yml.", default=".headerrc.yml"
+    )
 
     args, unknown = parser.parse_known_args(args)
     config = vars(args)  # Get args to print
@@ -236,15 +240,17 @@ def main(args=sys.argv[1:]) -> None:
     dry_run = _get_bool(config, "dry_run")
     verbose = _get_bool(config, "verbose")
     unit_test_mode = _get_bool(config, "unit_test_mode", default=False)
+    file_name = config.get("file_name", ".headerrc.yml")
 
     # Better to print
     args_detected = {
         "--dry-run": dry_run,
         "--verbose": verbose,
+        "--file-name": file_name,
     }
     print("Arguments detected:", args_detected)
 
-    h = HeaderPy(verbose=verbose, dry_run=dry_run, unit_test_mode=unit_test_mode)
+    h = HeaderPy(verbose=verbose, dry_run=dry_run, unit_test_mode=unit_test_mode, file_name=file_name)
     h.run()
 
 
