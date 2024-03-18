@@ -25,6 +25,19 @@ class HeaderPy:
         elif str(self.file_mode) == str(File_Mode.OPT_IN):
             self._loop_through_files_opt_in(self.header_rc.accepts)
 
+    def _remove_whitespace_from_header(self, header: str) -> str:
+        lines = header.split("\n")
+        for i, line in enumerate(lines):
+            lines[i] = line.strip()
+        return "\n".join(lines)
+
+    def _is_header_in_string(self, header: str, start_of_file: str) -> bool:
+        header_formatted = self._remove_whitespace_from_header(header)
+        start_of_file_formatted = self._remove_whitespace_from_header(start_of_file)
+        if header_formatted in start_of_file_formatted:
+            return True
+        return False
+
     def _add_header_to_file(
         self,
         file_path: Union[Path, str],
@@ -47,7 +60,8 @@ class HeaderPy:
                     cprint(f"Can't decode - {file_path}", "red")
                 return
 
-            if header in start_of_file:
+            header_in_file = self._is_header_in_string(header, start_of_file)
+            if header_in_file:
                 if self.verbose or self.dry_run:
                     print(f"Header already in - {relative_file_path}")
                 return  # Header already present, no need to add it
@@ -73,9 +87,9 @@ class HeaderPy:
                             break
                     else:
                         break
-                header_formatted = "\n\n" + header.rstrip("\r\n") + "\n\n"
+                header_formatted = "\n\n" + self._remove_whitespace_from_header(header).rstrip("\r\n") + "\n\n"
             else:
-                header_formatted = header.rstrip("\r\n") + "\n\n"
+                header_formatted = self._remove_whitespace_from_header(header).rstrip("\r\n") + "\n\n"
 
             modified_content = "\n".join(lines[:skip_index]) + header_formatted + "\n".join(lines[skip_index:])
             file.seek(0, 0)  # Move to the start of the file
@@ -103,7 +117,8 @@ class HeaderPy:
                     cprint(f"Can't decode - {file_path}", "red")
                 return
 
-            if header not in start_of_file:
+            header_in_file = self._is_header_in_string(header, start_of_file)
+            if not header_in_file:
                 if self.verbose or self.dry_run:
                     print(f"Header not in - {relative_file_path}")
                 return  # Header not present, no need to remove it
