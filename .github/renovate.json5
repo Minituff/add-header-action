@@ -2,7 +2,55 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "platform": "github",
   "dependencyDashboardTitle": "Renovate Dashboard 🤖",
+  "prHourlyLimit": 0,
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    ":dependencyDashboard",
+    "docker:enableMajor"
+  ],
+  "packageRules": [
+    {
+      "description": "Python dependencies",
+      "matchDatasources": ["pypi"],
+      "matchFileNames": [
+        "**/requirements.txt"
+      ],
+      "labels": ["depedency"],
+      "assignees": ["minituff"],
+      "automerge": true,
+      "rangeStrategy": "bump",
+      "ignoreTests": false,
+      "schedule": ["at any time"],
+      "minimumReleaseAge": "2 days",
+      "commitBody": "[bump version]",
+      "extends": [
+        "default:automergeDigest",
+        "default:automergeBranchPush"
+      ]
+    },
+    {
+      "description": "Python dev dependencies",
+      "matchDatasources": ["pypi"],
+      "matchFileNames": [
+        "**/requirements-dev.txt"
+      ],
+      "labels": ["dev-depedency"],
+      "assignees": ["minituff"],
+      "automerge": true,
+      "rangeStrategy": "bump",
+      "ignoreTests": false,
+      "schedule": ["at any time"],
+      "minimumReleaseAge": "2 days",
+      "extends": [
+        "default:automergeDigest",
+        "default:automergeBranchPush"
+      ]
+    }
+  ],
+  "hostRules": [
+    {
+      "hostType": "repology",
+      "timeout": 60000
+    }
   ]
 }

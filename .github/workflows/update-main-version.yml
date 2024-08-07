@@ -2,7 +2,8 @@ name: Update Main Version
 run-name: Move ${{ github.event.inputs.major_version }} to ${{ github.event.inputs.target }}
 
 on:
-  workflow_dispatch:
+  workflow_call: # Allow another workflow to call this one
+  workflow_dispatch: # Allow manually running
     inputs:
       target:
         description: The tag or reference to use
