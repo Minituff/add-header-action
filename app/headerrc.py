@@ -29,7 +29,7 @@ class HeaderRC:
             cprint(f"WARNING: {file_name} is not of type .yml", "red")
 
         self.home_path = Path("/app/")
-        self.work_path = Path("/github/workspace")
+        self.work_path = Path(os.environ.get("GITHUB_WORKSPACE", "/github/workspace"))
         if str(DEV_MODE).lower() == "true" or unit_test_mode == True:
             if unit_test_mode is False:
                 cprint("--- Running in DEV_MODE ---", "yellow")
