@@ -202,7 +202,7 @@ negate_characters: "++" # Default "!"
 1. `file_associations_by_extension`
 1. `skip_lines_that_have`
 
-Negation is an easy to to remove the default settings, but if we have a file association wrong, please submit an Issue or PR so we can fix it for everyone.
+Negation is an easy way to remove the default settings, but if we have a file association wrong, please submit an Issue or PR so we can fix it for everyone.
 
 
 ## Default argumnet values
