@@ -87,7 +87,11 @@ class HeaderPy:
                             break
                     else:
                         break
-                header_formatted = "\n\n" + self._remove_whitespace_from_header(header).rstrip("\r\n") + "\n\n"
+
+                if skip_index == 0:
+                    header_formatted = self._remove_whitespace_from_header(header).rstrip("\r\n") + "\n\n"
+                else:
+                    header_formatted = "\n\n" + self._remove_whitespace_from_header(header).rstrip("\r\n") + "\n\n"
             else:
                 header_formatted = self._remove_whitespace_from_header(header).rstrip("\r\n") + "\n\n"
 
