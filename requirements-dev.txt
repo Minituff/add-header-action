@@ -5,5 +5,5 @@
 mock==5.2.0
 pytest==9.0.0
 pytest-cov==7.0.0
-black==25.9.0
+black==25.11.0
 pre-commit==4.4.0
