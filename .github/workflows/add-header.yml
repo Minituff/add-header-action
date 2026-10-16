@@ -25,7 +25,7 @@ jobs:
         FORCE_COLOR: "1" # Optional: Shows color output in GitHub console.
 
     - name: Commit changes back to repo
-      uses: stefanzweifel/git-auto-commit-action@v6
+      uses: stefanzweifel/git-auto-commit-action@v7
       with:  # Token comes from actions/checkout
         commit_message: Add Header
        
